@@ -14,6 +14,7 @@ import {
   updateHomeTexts,
   HomeServiceItem,
   updateHomeServices,
+  updateHomeImages,
 } from "@/app/actions/homeAdmin";
 import {
   Settings,
@@ -92,7 +93,8 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
       // Одновременно сохраняем состояние блоков (в том числе heroForm),
       // чтобы переключатель формы заявки не требовал отдельной кнопки
       const blocksResult = await updateHomeBlocks(blocks);
-      if (textsResult.success && blocksResult.success) {
+      const imagesResult = await updateHomeImages(images);
+      if (textsResult.success && blocksResult.success && imagesResult.success) {
         setStatus("success");
       } else {
         setStatus("error");

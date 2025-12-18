@@ -1,26 +1,34 @@
 import { cookies } from "next/headers";
-import { promises as fs } from "fs";
-import path from "path";
-
-const ADMIN_AUTH_FILE = path.join(process.cwd(), "src/data/admin-auth.json");
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 const ENV_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 
 async function readStoredPassword(): Promise<string | null> {
-  try {
-    const raw = await fs.readFile(ADMIN_AUTH_FILE, "utf8");
-    const parsed = JSON.parse(raw) as { password?: string };
-    return typeof parsed.password === "string" && parsed.password.length > 0
-      ? parsed.password
-      : null;
-  } catch {
+  const { data, error } = await supabaseAdmin
+    .from("admin_auth")
+    .select("password")
+    .eq("id", 1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Supabase readStoredPassword error:", error.message);
     return null;
   }
+
+  return data?.password ?? null;
 }
 
 async function writeStoredPassword(password: string) {
-  await fs.mkdir(path.dirname(ADMIN_AUTH_FILE), { recursive: true });
-  const data = { password };
-  await fs.writeFile(ADMIN_AUTH_FILE, JSON.stringify(data, null, 2), "utf8");
+  const { error } = await supabaseAdmin.from("admin_auth").upsert(
+    {
+      id: 1,
+      password,
+    },
+    { onConflict: "id" }
+  );
+
+  if (error) {
+    console.error("Supabase writeStoredPassword error:", error.message);
+  }
 }
 
 async function getCurrentPassword(): Promise<string> {

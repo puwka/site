@@ -2,10 +2,7 @@
 
 import { checkAuth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { promises as fs } from "fs";
-import path from "path";
-
-const telegramFilePath = path.join(process.cwd(), "src/data/telegram-settings.json");
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export type TelegramSettings = {
   botToken: string;
@@ -13,21 +10,38 @@ export type TelegramSettings = {
 };
 
 async function readTelegramFile(): Promise<TelegramSettings | null> {
-  try {
-    const file = await fs.readFile(telegramFilePath, "utf8");
-    const data = JSON.parse(file);
-    if (data && typeof data.botToken === "string" && typeof data.chatId === "string") {
-      return { botToken: data.botToken, chatId: data.chatId };
-    }
-    return null;
-  } catch {
+  const { data, error } = await supabaseAdmin
+    .from("telegram_settings")
+    .select("bot_token, chat_id")
+    .eq("id", 1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Supabase readTelegramFile error:", error.message);
     return null;
   }
+
+  if (!data) return null;
+
+  return {
+    botToken: data.bot_token,
+    chatId: data.chat_id,
+  };
 }
 
 async function writeTelegramFile(settings: TelegramSettings) {
-  const toWrite = JSON.stringify(settings, null, 2);
-  await fs.writeFile(telegramFilePath, toWrite, "utf8");
+  const { error } = await supabaseAdmin.from("telegram_settings").upsert(
+    {
+      id: 1,
+      bot_token: settings.botToken,
+      chat_id: settings.chatId,
+    },
+    { onConflict: "id" }
+  );
+
+  if (error) {
+    console.error("Supabase writeTelegramFile error:", error.message);
+  }
 }
 
 export async function getTelegramSettings(): Promise<TelegramSettings | null> {

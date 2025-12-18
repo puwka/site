@@ -28,6 +28,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { sendTelegram } from "@/app/actions/sendTelegram";
 
 type ContactsConfig = {
@@ -109,6 +110,8 @@ export default function Home() {
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
   const [homeConfig, setHomeConfig] = useState<HomeAdminConfig | null>(null);
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
+  const [aboutImageLoaded, setAboutImageLoaded] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -192,13 +195,9 @@ export default function Home() {
           link: `/services/${category.slug}`,
         }));
 
-  const heroBg =
-    images.heroBg ||
-    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=2070&q=80";
+  const heroBg = images.heroBg || "";
 
-  const aboutBg =
-    images.aboutBg ||
-    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=2070&q=80";
+  const aboutBg = images.aboutBg || "";
 
   const handleHeroSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -237,12 +236,18 @@ export default function Home() {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24">
         {/* Background Image with Dark Overlay */}
         <div className="absolute inset-0">
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url('${heroBg}')`,
-            }}
-          />
+          {heroBg && (
+            <Image
+              src={heroBg}
+              alt="Фон главного экрана"
+              fill
+              priority
+              className={`object-cover transition-opacity duration-700 ${
+                heroImageLoaded ? "opacity-100" : "opacity-0"
+              }`}
+              onLoadingComplete={() => setHeroImageLoaded(true)}
+            />
+          )}
           <div className="absolute inset-0 bg-black/60" />
         </div>
 
@@ -272,13 +277,13 @@ export default function Home() {
 
               {/* Right: Order Form */}
               {blocks.heroForm && (
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
+              <motion.div
+                  initial={{ opacity: 0, y: 30, backdropFilter: "blur(0px)" }}
+                  animate={{ opacity: 1, y: 0, backdropFilter: "blur(24px)" }}
                   transition={{ duration: 0.8, delay: 0.4 }}
                   className="w-full"
                 >
-                  <div className="relative p-8 md:p-10 rounded-3xl backdrop-blur-2xl shadow-2xl border
+                  <div className="relative p-8 md:p-10 rounded-3xl shadow-2xl border
                                   dark:border-white/20 dark:bg-gradient-to-br dark:from-black/40 dark:via-black/60 dark:to-black/40
                                   light:bg-white light:border-zinc-200 light:shadow-xl">
                     {/* Decorative elements */}
@@ -610,12 +615,17 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden"
             >
-              <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{
-                  backgroundImage: `url('${aboutBg}')`,
-                }}
-              />
+              {aboutBg && (
+                <Image
+                  src={aboutBg}
+                  alt="О компании"
+                  fill
+                  className={`object-cover transition-opacity duration-700 ${
+                    aboutImageLoaded ? "opacity-100" : "opacity-0"
+                  }`}
+                  onLoadingComplete={() => setAboutImageLoaded(true)}
+                />
+              )}
               <div className="absolute inset-0 bg-black/40" />
             </motion.div>
           </div>

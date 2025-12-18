@@ -17,8 +17,8 @@
     "contactsCta": "Оставьте заявку, и мы свяжемся с вами в ближайшее время"
   },
   "images": {
-    "heroBg": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=2070&q=80",
-    "aboutBg": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=2070&q=80"
+    "heroBg": "/uploads/heroBg-1766087071343.jpg",
+    "aboutBg": "/uploads/aboutBg-1766087475663.jpg"
   },
   "services": [
     {

@@ -1,9 +1,6 @@
 "use server";
 
-import { promises as fs } from "fs";
-import path from "path";
-
-const homeFilePath = path.join(process.cwd(), "src/data/home-admin.json");
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export interface HomeBlocks {
   hero: boolean;
@@ -109,73 +106,112 @@ const defaultHomeData: HomeAdminData = {
   ],
 };
 
-async function readHomeFile(): Promise<HomeAdminData> {
-  try {
-    const file = await fs.readFile(homeFilePath, "utf8");
-    const data = JSON.parse(file) as Partial<HomeAdminData>;
-    return {
-      blocks: { ...defaultHomeData.blocks, ...(data.blocks || {}) },
-      texts: { ...defaultHomeData.texts, ...(data.texts || {}) },
-      images: { ...defaultHomeData.images, ...(data.images || {}) },
-      services: data.services ?? defaultHomeData.services,
-    };
-  } catch {
-    return defaultHomeData;
+const HOME_ID = 1;
+
+async function readHome(): Promise<HomeAdminData> {
+  const { data: row, error } = await supabaseAdmin
+    .from("home_admin")
+    .select("blocks, texts, images")
+    .eq("id", HOME_ID)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Supabase readHome error:", error.message);
+  }
+
+  const blocks = { ...defaultHomeData.blocks, ...(row?.blocks || {}) };
+  const texts = { ...defaultHomeData.texts, ...(row?.texts || {}) };
+  const images = { ...defaultHomeData.images, ...(row?.images || {}) };
+
+  const { data: servicesRows, error: servicesError } = await supabaseAdmin
+    .from("home_services")
+    .select("id, title, description, link");
+
+  if (servicesError) {
+    console.error("Supabase read home services error:", servicesError.message);
+  }
+
+  const services: HomeServiceItem[] =
+    servicesRows?.map((row) => ({
+      id: row.id,
+      title: row.title,
+      description: row.description,
+      link: row.link ?? undefined,
+    })) ?? defaultHomeData.services;
+
+  return { blocks, texts, images, services };
+}
+
+async function writeHome(partial: Partial<HomeAdminData>) {
+  const current = await readHome();
+  const next: HomeAdminData = {
+    ...current,
+    ...partial,
+  };
+
+  const { error } = await supabaseAdmin.from("home_admin").upsert(
+    {
+      id: HOME_ID,
+      blocks: next.blocks,
+      texts: next.texts,
+      images: next.images,
+    },
+    { onConflict: "id" }
+  );
+
+  if (error) {
+    console.error("Supabase writeHome error:", error.message);
   }
 }
 
-async function writeHomeFile(data: HomeAdminData) {
-  const toWrite = JSON.stringify(data, null, 2);
-  await fs.writeFile(homeFilePath, toWrite, "utf8");
-}
-
 export async function getHomeAdmin(): Promise<HomeAdminData> {
-  return readHomeFile();
+  return readHome();
 }
 
 export async function updateHomeBlocks(blocks: HomeBlocks) {
-  const data = await readHomeFile();
-  const next: HomeAdminData = {
-    ...data,
-    blocks,
-  };
-  await writeHomeFile(next);
+  await writeHome({ blocks });
   return { success: true };
 }
 
 export async function updateHomeTexts(texts: Partial<HomeTexts>) {
-  const data = await readHomeFile();
-  const next: HomeAdminData = {
-    ...data,
+  const data = await readHome();
+  await writeHome({
     texts: {
       ...data.texts,
       ...texts,
     },
-  };
-  await writeHomeFile(next);
+  });
   return { success: true };
 }
 
 export async function updateHomeImages(images: Partial<HomeImages>) {
-  const data = await readHomeFile();
-  const next: HomeAdminData = {
-    ...data,
+  const data = await readHome();
+  await writeHome({
     images: {
       ...data.images,
       ...images,
     },
-  };
-  await writeHomeFile(next);
+  });
   return { success: true };
 }
 
 export async function updateHomeServices(services: HomeServiceItem[]) {
-  const data = await readHomeFile();
-  const next: HomeAdminData = {
-    ...data,
-    services,
-  };
-  await writeHomeFile(next);
+  // persist services list in separate table
+  const rows = services.map((service) => ({
+    id: service.id,
+    title: service.title,
+    description: service.description,
+    link: service.link ?? null,
+  }));
+
+  const { error } = await supabaseAdmin.from("home_services").upsert(rows, {
+    onConflict: "id",
+  });
+
+  if (error) {
+    console.error("Supabase updateHomeServices error:", error.message);
+  }
+
   return { success: true };
 }
 
