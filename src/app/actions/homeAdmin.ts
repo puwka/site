@@ -132,12 +132,14 @@ async function readHome(): Promise<HomeAdminData> {
   }
 
   const services: HomeServiceItem[] =
-    servicesRows?.map((row) => ({
-      id: row.id,
-      title: row.title,
-      description: row.description,
-      link: row.link ?? undefined,
-    })) ?? defaultHomeData.services;
+    servicesRows && servicesRows.length > 0
+      ? servicesRows.map((row) => ({
+          id: row.id,
+          title: row.title,
+          description: row.description,
+          link: row.link ?? undefined,
+        }))
+      : defaultHomeData.services;
 
   return { blocks, texts, images, services };
 }
