@@ -131,15 +131,18 @@ async function readHome(): Promise<HomeAdminData> {
     console.error("Supabase read home services error:", servicesError.message);
   }
 
-  const services: HomeServiceItem[] =
-    servicesRows && servicesRows.length > 0
-      ? servicesRows.map((row) => ({
-          id: row.id,
-          title: row.title,
-          description: row.description,
-          link: row.link ?? undefined,
-        }))
-      : defaultHomeData.services;
+  let services: HomeServiceItem[] = defaultHomeData.services;
+
+  if (servicesRows && servicesRows.length > 0) {
+    services = servicesRows.map(
+      (row: any): HomeServiceItem => ({
+        id: row.id as string,
+        title: row.title as string,
+        description: row.description as string,
+        link: row.link ?? undefined,
+      })
+    );
+  }
 
   return { blocks, texts, images, services };
 }
