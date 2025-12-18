@@ -1,0 +1,56 @@
+{
+  "warehouse-staff": {
+    "id": "warehouse-staff",
+    "slug": "personnel-na-sklad",
+    "title": "Персонал на склад",
+    "description": "Профессиональный складской персонал для различных операций",
+    "categoryId": "warehouse",
+    "fullDescription": "Предоставляем квалифицированный персонал для работы на складе. Наши сотрудники имеют опыт работы с различными типами грузов и складского оборудования.",
+    "seoText": "Аренда персонала для склада в Москве. Квалифицированные складские работники с опытом работы. Быстрое предоставление персонала для складских операций.",
+    "pricingTable": [
+      {
+        "name": "Грузчик",
+        "price": "от 1500",
+        "unit": "руб/смена"
+      },
+      {
+        "name": "Комплектовщик",
+        "price": "от 1800",
+        "unit": "руб/смена"
+      },
+      {
+        "name": "Кладовщик",
+        "price": "от 2000",
+        "unit": "руб/смена"
+      }
+    ],
+    "images": []
+  },
+  "service-1766054453314": {
+    "id": "service-1766054453314",
+    "slug": "sdsa",
+    "title": "Новая услуга",
+    "description": "adwa",
+    "price": "",
+    "categoryId": "warehouse",
+    "fullDescription": "dadaw",
+    "seoText": "dawdwa",
+    "pricingTable": [
+      {
+        "name": "dwadw",
+        "price": "555",
+        "unit": ""
+      }
+    ],
+    "images": [
+      "/uploads/1766054469850-d0refr.png",
+      "/uploads/1766054471977-r0tsre.png",
+      "/uploads/1766054474986-2rtbrg.png"
+    ],
+    "showOrderForm": false,
+    "deleted": true
+  },
+  "putty-workers": {
+    "id": "putty-workers",
+    "deleted": true
+  }
