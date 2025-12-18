@@ -819,7 +819,7 @@ export default function Home() {
             {contactsConfig?.showAddress !== false &&
               (contactsConfig?.addressLine || (contactsConfig as any)?.mapAddress) && (
                 <p className="text-sm text-muted-foreground text-center max-w-2xl mx-auto">
-                  {contactsConfig.addressLine || (contactsConfig as any).mapAddress}
+                  {contactsConfig?.addressLine || (contactsConfig as any)?.mapAddress}
                 </p>
               )}
           </div>
