@@ -124,7 +124,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
 
   return (
     <div className="space-y-8">
-      <Card className="border-zinc-800 bg-zinc-900/60">
+      <Card className="border-border bg-card/60">
         <CardContent className="p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-[oklch(0.75_0.18_50)]/15 flex items-center justify-center">
@@ -144,7 +144,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Левая колонка: тумблеры блоков */}
-        <Card className="border-zinc-800 bg-zinc-900/70 lg:col-span-1">
+        <Card className="border-border bg-card/70 lg:col-span-1">
           <CardHeader>
             <CardTitle className="font-[var(--font-oswald)] text-lg uppercase flex items-center gap-2">
               Блоки страницы
@@ -160,7 +160,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
             ].map((item) => (
               <label
                 key={item.key}
-                className="flex items-start justify-between gap-4 rounded-lg border border-zinc-800 px-3 py-2 text-sm"
+                className="flex items-start justify-between gap-4 rounded-lg border border-border px-3 py-2 text-sm"
               >
                 <span className="text-foreground flex-1 leading-snug">{item.label}</span>
                 <button
@@ -189,7 +189,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
         </Card>
 
         {/* Правая часть: данные контактов и карты */}
-        <Card className="border-zinc-800 bg-zinc-900/70 lg:col-span-2">
+        <Card className="border-border bg-card/70 lg:col-span-2">
           <CardHeader>
             <CardTitle className="font-[var(--font-oswald)] text-lg uppercase flex items-center gap-2">
               Основные данные
@@ -204,7 +204,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
               <Input
                 value={config.heroSubtitle}
                 onChange={(e) => setConfig((prev) => ({ ...prev, heroSubtitle: e.target.value }))}
-                className="bg-zinc-950 border-zinc-800"
+                className="bg-background border-border"
               />
             </div>
 
@@ -218,7 +218,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                 <Input
                   value={config.phoneNumber}
                   onChange={(e) => setConfig((prev) => ({ ...prev, phoneNumber: e.target.value }))}
-                  className="bg-zinc-950 border-zinc-800"
+                  className="bg-background border-border"
                 />
               </div>
               <div>
@@ -228,7 +228,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                 <Input
                   value={config.email}
                   onChange={(e) => setConfig((prev) => ({ ...prev, email: e.target.value }))}
-                  className="bg-zinc-950 border-zinc-800"
+                  className="bg-background border-border"
                 />
               </div>
               <div>
@@ -241,7 +241,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                     setConfig((prev) => ({ ...prev, telegramLink: e.target.value }))
                   }
                   placeholder="https://t.me/..."
-                  className="bg-zinc-950 border-zinc-800"
+                  className="bg-background border-border"
                 />
               </div>
               <div>
@@ -254,7 +254,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                     setConfig((prev) => ({ ...prev, whatsappLink: e.target.value }))
                   }
                   placeholder="https://wa.me/..."
-                  className="bg-zinc-950 border-zinc-800"
+                  className="bg-background border-border"
                 />
               </div>
             </div>
@@ -270,14 +270,14 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                 onChange={(e) =>
                   setConfig((prev) => ({ ...prev, scheduleMain: e.target.value }))
                 }
-                className="bg-zinc-950 border-zinc-800 mb-2"
+                className="bg-background border-border mb-2"
               />
               <Input
                 value={config.scheduleNote}
                 onChange={(e) =>
                   setConfig((prev) => ({ ...prev, scheduleNote: e.target.value }))
                 }
-                className="bg-zinc-950 border-zinc-800"
+                className="bg-background border-border"
               />
             </div>
 
@@ -292,7 +292,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                   <Input
                     value={config.inn}
                     onChange={(e) => setConfig((prev) => ({ ...prev, inn: e.target.value }))}
-                    className="bg-zinc-950 border-zinc-800"
+                    className="bg-background border-border"
                   />
                 </div>
                 <div>
@@ -300,7 +300,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                   <Input
                     value={config.ogrn}
                     onChange={(e) => setConfig((prev) => ({ ...prev, ogrn: e.target.value }))}
-                    className="bg-zinc-950 border-zinc-800"
+                    className="bg-background border-border"
                   />
                 </div>
                 <div>
@@ -312,7 +312,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                     onChange={(e) =>
                       setConfig((prev) => ({ ...prev, companyName: e.target.value }))
                     }
-                    className="bg-zinc-950 border-zinc-800"
+                    className="bg-background border-border"
                   />
                 </div>
               </div>
@@ -327,7 +327,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                     setConfig((prev) => ({ ...prev, addressLine: e.target.value }))
                   }
                   placeholder="Например: г. Москва, Красная площадь, д. 4"
-                  className="bg-zinc-950 border-zinc-800"
+                  className="bg-background border-border"
                 />
               </div>
             </div>
@@ -342,7 +342,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                 <Input
                   value={config.mapTitle}
                   onChange={(e) => setConfig((prev) => ({ ...prev, mapTitle: e.target.value }))}
-                  className="bg-zinc-950 border-zinc-800 mb-2"
+                  className="bg-background border-border mb-2"
                 />
               </div>
 
@@ -354,7 +354,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                   value={config.mapAddress ?? ""}
                   onChange={(e) => handleSearchAddress(e.target.value)}
                   placeholder="Например: Москва, Красная площадь 1"
-                  className="bg-zinc-950 border-zinc-800 text-sm"
+                  className="bg-background border-border text-sm"
                 />
                 {isSearchingAddress && (
                   <p className="text-[10px] text-muted-foreground mt-1">
@@ -362,7 +362,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                   </p>
                 )}
                 {addressSuggestions.length > 0 && (
-                  <div className="mt-1 max-h-48 overflow-auto rounded-lg border border-zinc-800 bg-zinc-950 text-xs shadow-lg">
+                  <div className="mt-1 max-h-48 overflow-auto rounded-lg border border-border bg-background text-xs shadow-lg">
                     {addressSuggestions.map((item, index) => (
                       <button
                         key={`${item.lat}-${item.lon}-${index}`}
@@ -378,7 +378,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                           setAddressSuggestions([]);
                           setAddressQuery(item.displayName);
                         }}
-                        className="w-full text-left px-3 py-2 hover:bg-zinc-800/70 border-b border-zinc-800 last:border-b-0"
+                        className="w-full text-left px-3 py-2 hover:bg-zinc-800/70 border-b border-border last:border-b-0"
                       >
                         {item.displayName}
                       </button>
@@ -399,7 +399,7 @@ export default function ContactsAdminPanel({ initialConfig }: ContactsAdminPanel
                   onChange={(e) =>
                     setConfig((prev) => ({ ...prev, mapIframeSrc: e.target.value }))
                   }
-                  className="bg-zinc-950 border-zinc-800 min-h-[80px] text-xs"
+                  className="bg-background border-border min-h-[80px] text-xs"
                 />
               </div>
             </div>

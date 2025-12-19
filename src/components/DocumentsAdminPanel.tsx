@@ -167,7 +167,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
 
   return (
     <div className="space-y-8">
-      <Card className="border-zinc-800 bg-zinc-900/60">
+      <Card className="border-border bg-card/60">
         <CardContent className="p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-[oklch(0.75_0.18_50)]/15 flex items-center justify-center">
@@ -187,7 +187,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Навигация по документам */}
-        <Card className="border-zinc-800 bg-zinc-900/70 lg:col-span-1">
+        <Card className="border-border bg-card/70 lg:col-span-1">
           <CardHeader>
             <CardTitle className="font-[var(--font-oswald)] text-lg uppercase">
               Тип документа
@@ -200,7 +200,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
               className={`w-full text-left px-3 py-2 rounded-lg border flex items-center justify-between gap-3 transition-colors ${
                 activeTab === "privacy"
                   ? "border-[oklch(0.75_0.18_50)] bg-[oklch(0.75_0.18_50)]/10 text-foreground"
-                  : "border-zinc-800 bg-zinc-900/40 text-muted-foreground hover:border-zinc-700 hover:text-foreground"
+                  : "border-border bg-card/40 text-muted-foreground hover:border-zinc-700 hover:text-foreground"
               }`}
             >
               <span className="text-sm flex items-center gap-2">
@@ -214,7 +214,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
               className={`w-full text-left px-3 py-2 rounded-lg border flex items-center justify-between gap-3 transition-colors ${
                 activeTab === "offer"
                   ? "border-[oklch(0.75_0.18_50)] bg-[oklch(0.75_0.18_50)]/10 text-foreground"
-                  : "border-zinc-800 bg-zinc-900/40 text-muted-foreground hover:border-zinc-700 hover:text-foreground"
+                  : "border-border bg-card/40 text-muted-foreground hover:border-zinc-700 hover:text-foreground"
               }`}
             >
               <span className="text-sm flex items-center gap-2">
@@ -226,7 +226,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
         </Card>
 
         {/* Редактор разделов */}
-        <Card className="border-zinc-800 bg-zinc-900/70 lg:col-span-3">
+        <Card className="border-border bg-card/70 lg:col-span-3">
           <CardHeader>
             <CardTitle className="font-[var(--font-oswald)] text-lg uppercase flex items-center gap-2">
               {activeTab === "privacy" ? "Политика конфиденциальности" : "Договор оферты"}
@@ -238,7 +238,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
             </p>
 
             {/* Настройки нижнего блока и чекбокса согласия */}
-            <div className="space-y-3 rounded-lg border border-zinc-800 bg-zinc-950/60 px-4 py-4">
+            <div className="space-y-3 rounded-lg border border-border bg-background/60 px-4 py-4">
               <div className="flex items-center justify-between gap-4">
                 <div className="space-y-1">
                   <p className="text-sm font-medium text-foreground">
@@ -269,7 +269,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
                 </button>
               </div>
 
-              <div className="mt-3 pt-3 border-t border-zinc-800 space-y-3">
+              <div className="mt-3 pt-3 border-t border-border space-y-3">
                 <div className="flex items-center justify-between gap-4">
                   <div className="space-y-1">
                     <p className="text-sm font-medium text-foreground">
@@ -310,7 +310,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
                       onChange={(e) =>
                         setConfig((prev) => ({ ...prev, consentLabelPrefix: e.target.value }))
                       }
-                      className="bg-zinc-950 border-zinc-800 text-sm"
+                      className="bg-background border-border text-sm"
                       placeholder="Я соглашаюсь на обработку персональных данных и принимаю"
                     />
                   </div>
@@ -323,7 +323,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
                       onChange={(e) =>
                         setConfig((prev) => ({ ...prev, consentLinkText: e.target.value }))
                       }
-                      className="bg-zinc-950 border-zinc-800 text-sm"
+                      className="bg-background border-border text-sm"
                       placeholder="политику конфиденциальности"
                     />
                   </div>
@@ -336,7 +336,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
                       onChange={(e) =>
                         setConfig((prev) => ({ ...prev, consentLinkHref: e.target.value }))
                       }
-                      className="bg-zinc-950 border-zinc-800 text-sm"
+                      className="bg-background border-border text-sm"
                       placeholder="/privacy"
                     />
                   </div>
@@ -347,7 +347,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
               {currentSections.map((section, index) => (
                 <div
                   key={`${section.title}-${index}`}
-                  className="border border-zinc-800 rounded-xl p-4 bg-zinc-950/60 space-y-3"
+                  className="border border-border rounded-xl p-4 bg-background/60 space-y-3"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex-1">
@@ -359,7 +359,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
                         onChange={(e) =>
                           updateSection(index, (s) => ({ ...s, title: e.target.value }))
                         }
-                        className="bg-zinc-950 border-zinc-800 text-sm"
+                        className="bg-background border-border text-sm"
                       />
                     </div>
                     <Button
@@ -387,7 +387,7 @@ export default function DocumentsAdminPanel({ initialConfig }: DocumentsAdminPan
                         updateSection(index, (s) => ({ ...s, content: paragraphs }));
                       }}
                       rows={6}
-                      className="bg-zinc-950 border-zinc-800 text-sm resize-y"
+                      className="bg-background border-border text-sm resize-y"
                     />
                   </div>
                 </div>

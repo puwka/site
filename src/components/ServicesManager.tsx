@@ -231,7 +231,7 @@ export default function ServicesManager() {
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="border-b border-zinc-800">
+            <tr className="border-b border-border">
               <th className="text-left py-4 px-4 font-[var(--font-oswald)] text-sm uppercase text-muted-foreground">
                 Категория
               </th>
@@ -253,7 +253,7 @@ export default function ServicesManager() {
               return (
                 <tr
                   key={service.id}
-                  className="border-b border-zinc-800/50 hover:bg-zinc-900/50 transition-colors"
+                  className="border-b border-border/50 hover:bg-card/50 transition-colors"
                 >
                   <td className="py-4 px-4 text-sm text-muted-foreground">
                     {getCategoryName(service.categoryId)}
@@ -265,7 +265,7 @@ export default function ServicesManager() {
                         onChange={(e) =>
                           setEditedService({ ...editedService, title: e.target.value })
                         }
-                        className="bg-zinc-950 border-zinc-800 w-full"
+                        className="bg-background border-border w-full"
                       />
                     ) : (
                       <span className="font-medium">{service.title}</span>
@@ -278,7 +278,7 @@ export default function ServicesManager() {
                         onChange={(e) =>
                           setEditedService({ ...editedService, price: e.target.value })
                         }
-                        className="bg-zinc-950 border-zinc-800 w-32"
+                        className="bg-background border-border w-32"
                         placeholder="от 1500 руб"
                       />
                     ) : (
@@ -336,7 +336,7 @@ export default function ServicesManager() {
             initial={{ scale: 0.95 }}
             animate={{ scale: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-2xl p-6 max-h-[90vh] overflow-y-auto custom-scrollbar"
+            className="w-full max-w-2xl bg-card border border-border rounded-2xl p-6 max-h-[90vh] overflow-y-auto custom-scrollbar"
           >
             <h3 className="font-[var(--font-oswald)] text-2xl font-bold uppercase mb-6">
               Редактирование услуги
@@ -344,7 +344,7 @@ export default function ServicesManager() {
 
             <div className="space-y-4">
               {/* Базовые настройки */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-zinc-800 rounded-lg p-4 bg-zinc-950/50">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-border rounded-lg p-4 bg-background/50">
                 <div>
                   <label className="text-sm font-medium mb-2 block">Название услуги</label>
                   <Input
@@ -352,7 +352,7 @@ export default function ServicesManager() {
                     onChange={(e) =>
                       setEditedService({ ...editedService, title: e.target.value })
                     }
-                    className="bg-zinc-950 border-zinc-800"
+                    className="bg-background border-border"
                     placeholder="Персонал на склад"
                   />
                 </div>
@@ -363,7 +363,7 @@ export default function ServicesManager() {
                     onChange={(e) =>
                       setEditedService({ ...editedService, slug: e.target.value })
                     }
-                    className="bg-zinc-950 border-zinc-800"
+                    className="bg-background border-border"
                     placeholder="personnel-na-sklad"
                   />
                   <p className="text-[10px] text-muted-foreground mt-1">
@@ -384,7 +384,7 @@ export default function ServicesManager() {
                         categoryId: e.target.value,
                       })
                     }
-                    className="w-full h-10 px-3 rounded-md bg-zinc-950 border border-zinc-800 text-sm"
+                    className="w-full h-10 px-3 rounded-md bg-background border border-border text-sm"
                   >
                     <option value="" disabled>
                       Выберите категорию
@@ -403,7 +403,7 @@ export default function ServicesManager() {
                     onChange={(e) =>
                       setEditedService({ ...editedService, price: e.target.value })
                     }
-                    className="bg-zinc-950 border-zinc-800"
+                    className="bg-background border-border"
                     placeholder="от 1500 руб/смена"
                   />
                   <p className="text-[10px] text-muted-foreground mt-1">
@@ -411,7 +411,7 @@ export default function ServicesManager() {
                   </p>
                 </div>
 
-                <div className="md:col-span-2 flex items-center justify-between mt-2 p-3 rounded-lg bg-zinc-950 border border-zinc-800">
+                <div className="md:col-span-2 flex items-center justify-between mt-2 p-3 rounded-lg bg-background border border-border">
                   <div>
                     <p className="text-sm font-medium text-foreground">
                       Форма заявки на странице услуги
@@ -431,7 +431,7 @@ export default function ServicesManager() {
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                       editedService.showOrderForm ?? true
                         ? "bg-[oklch(0.75_0.18_50)]"
-                        : "bg-zinc-700"
+                        : "bg-muted"
                     }`}
                   >
                     <span
@@ -452,7 +452,7 @@ export default function ServicesManager() {
                   onChange={(e) =>
                     setEditedService({ ...editedService, description: e.target.value })
                   }
-                  className="bg-zinc-950 border-zinc-800"
+                  className="bg-background border-border"
                   rows={3}
                 />
               </div>
@@ -464,7 +464,7 @@ export default function ServicesManager() {
                   onChange={(e) =>
                     setEditedService({ ...editedService, fullDescription: e.target.value })
                   }
-                  className="bg-zinc-950 border-zinc-800"
+                  className="bg-background border-border"
                   rows={5}
                 />
               </div>
@@ -476,7 +476,7 @@ export default function ServicesManager() {
                   onChange={(e) =>
                     setEditedService({ ...editedService, seoText: e.target.value })
                   }
-                  className="bg-zinc-950 border-zinc-800"
+                  className="bg-background border-border"
                   rows={4}
                 />
               </div>
@@ -507,7 +507,7 @@ export default function ServicesManager() {
                       size="sm"
                       onClick={() => imageFileInputRef.current?.click()}
                       disabled={isUploadingImage}
-                      className="border-zinc-700 text-xs"
+                      className="border-border text-xs"
                     >
                       {isUploadingImage ? (
                         <span className="flex items-center gap-2">
@@ -542,7 +542,7 @@ export default function ServicesManager() {
                           });
                         }}
                         placeholder="https://..."
-                        className="bg-zinc-950 border-zinc-800 text-sm flex-1"
+                        className="bg-background border-border text-sm flex-1"
                       />
                       <div className="flex items-center gap-1">
                         {index !== 0 && (
@@ -550,7 +550,7 @@ export default function ServicesManager() {
                             type="button"
                             variant="outline"
                             size="icon"
-                            className="border-zinc-700 text-[10px] px-2"
+                            className="border-border text-[10px] px-2"
                             title="Сделать главным фото"
                             onClick={() => {
                               const current = editedService.images || [];
@@ -602,7 +602,7 @@ export default function ServicesManager() {
                         images: next,
                       });
                     }}
-                    className="w-full justify-center border-zinc-700 text-xs"
+                    className="w-full justify-center border-border text-xs"
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Добавить фото
@@ -632,7 +632,7 @@ export default function ServicesManager() {
                           });
                         }}
                         placeholder="Название позиции (например, Грузчик 8 часов)"
-                        className="bg-zinc-950 border-zinc-800 text-sm"
+                        className="bg-background border-border text-sm"
                       />
                       <div className="flex gap-2">
                         <Input
@@ -646,7 +646,7 @@ export default function ServicesManager() {
                             });
                           }}
                           placeholder="от 2000"
-                          className="bg-zinc-950 border-zinc-800 text-sm"
+                          className="bg-background border-border text-sm"
                         />
                         <Input
                           value={row.unit || ""}
@@ -659,7 +659,7 @@ export default function ServicesManager() {
                             });
                           }}
                           placeholder="руб/смена"
-                          className="bg-zinc-950 border-zinc-800 text-xs w-28"
+                          className="bg-background border-border text-xs w-28"
                         />
                       </div>
                       <Button
@@ -697,7 +697,7 @@ export default function ServicesManager() {
                         pricingTable: next,
                       });
                     }}
-                    className="w-full justify-center border-zinc-700 text-xs"
+                    className="w-full justify-center border-border text-xs"
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Добавить строку тарифа

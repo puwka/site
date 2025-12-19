@@ -42,20 +42,20 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
         className="w-full max-w-md"
       >
-        <Card className="border-zinc-800 bg-zinc-900/50 backdrop-blur-sm">
+        <Card className="border-border bg-card/50 backdrop-blur-sm">
           <CardContent className="p-8">
             <div className="text-center mb-8">
               <div className="w-16 h-16 rounded-xl bg-[oklch(0.75_0.18_50)]/10 flex items-center justify-center mx-auto mb-4">
                 <Lock className="w-8 h-8 text-[oklch(0.75_0.18_50)]" />
               </div>
-              <h1 className="font-[var(--font-oswald)] text-3xl font-bold uppercase mb-2">
+              <h1 className="font-[var(--font-oswald)] text-3xl font-bold uppercase mb-2 text-foreground">
                 Access Terminal
               </h1>
               <p className="text-muted-foreground text-sm">
@@ -71,7 +71,7 @@ export default function AdminLoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="bg-zinc-950 border-zinc-800 h-12"
+                  className="bg-background border-border h-12 text-foreground"
                   disabled={isLoading || status === "success"}
                 />
               </div>

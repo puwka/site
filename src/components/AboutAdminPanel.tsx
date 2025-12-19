@@ -169,7 +169,7 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
   return (
     <div className="space-y-6">
       {/* Блоки и форма */}
-      <Card className="border-zinc-800 bg-zinc-900/60">
+      <Card className="border-border bg-card/60">
         <CardHeader>
           <CardTitle className="font-[var(--font-oswald)] text-xl uppercase">
             Блоки страницы «О компании»
@@ -186,7 +186,7 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
           ].map((item) => (
             <label
               key={item.key}
-              className="flex items-center justify-between gap-4 rounded-lg border border-zinc-800 px-3 py-2 text-sm"
+              className="flex items-center justify-between gap-4 rounded-lg border border-border px-3 py-2 text-sm"
             >
               <span className="text-foreground">{item.label}</span>
               <button
@@ -225,7 +225,7 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
       </Card>
 
       {/* Галерея фото */}
-      <Card className="border-zinc-800 bg-zinc-900/60">
+      <Card className="border-border bg-card/60">
         <CardHeader>
           <CardTitle className="font-[var(--font-oswald)] text-xl uppercase">
             Фотографии для блока «Мы подбираем не случайных людей»
@@ -281,7 +281,7 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
                       return { ...prev, galleryImages: next };
                     })
                   }
-                  className="bg-zinc-950 border-zinc-800 text-xs flex-1"
+                  className="bg-background border-border text-xs flex-1"
                   rows={2}
                   placeholder="https://..."
                 />
@@ -332,7 +332,7 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
       </Card>
 
       {/* Текст о компании */}
-      <Card className="border-zinc-800 bg-zinc-900/60">
+      <Card className="border-border bg-card/60">
         <CardHeader>
           <CardTitle className="font-[var(--font-oswald)] text-xl uppercase">
             Основной текст о компании
@@ -348,7 +348,7 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
           <Textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="bg-zinc-950 border-zinc-800 min-height-[260px]"
+            className="bg-background border-border min-height-[260px]"
             rows={10}
           />
           <Button

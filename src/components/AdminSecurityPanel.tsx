@@ -48,7 +48,7 @@ export default function AdminSecurityPanel() {
   };
 
   return (
-    <Card className="border-zinc-800 bg-zinc-900/60 max-w-xl">
+    <Card className="border-border bg-card/60 max-w-xl">
       <CardHeader>
         <CardTitle className="font-[var(--font-oswald)] text-xl uppercase flex items-center gap-2">
           <Lock className="w-4 h-4" />
@@ -65,7 +65,7 @@ export default function AdminSecurityPanel() {
               type="password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              className="bg-zinc-950 border-zinc-800"
+              className="bg-background border-border"
               disabled={isSaving}
               required
             />
@@ -78,7 +78,7 @@ export default function AdminSecurityPanel() {
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="bg-zinc-950 border-zinc-800"
+              className="bg-background border-border"
               disabled={isSaving}
               required
               minLength={6}
@@ -92,7 +92,7 @@ export default function AdminSecurityPanel() {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="bg-zinc-950 border-zinc-800"
+              className="bg-background border-border"
               disabled={isSaving}
               required
               minLength={6}

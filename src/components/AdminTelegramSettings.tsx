@@ -57,7 +57,7 @@ export default function AdminTelegramSettings() {
   };
 
   return (
-    <Card className="border-zinc-800 bg-zinc-900/60">
+    <Card className="border-border bg-card/60">
       <CardHeader>
         <CardTitle className="font-[var(--font-oswald)] text-lg uppercase flex items-center gap-2">
           <Send className="w-4 h-4" />
@@ -78,7 +78,7 @@ export default function AdminTelegramSettings() {
               type="text"
               value={settings.botToken}
               onChange={(e) => setSettings((prev) => ({ ...prev, botToken: e.target.value }))}
-              className="bg-zinc-950 border-zinc-800 font-mono text-xs"
+              className="bg-background border-border font-mono text-xs"
               placeholder="8574...:AA..."
               required
             />
@@ -92,7 +92,7 @@ export default function AdminTelegramSettings() {
               type="text"
               value={settings.chatId}
               onChange={(e) => setSettings((prev) => ({ ...prev, chatId: e.target.value }))}
-              className="bg-zinc-950 border-zinc-800 font-mono text-xs"
+              className="bg-background border-border font-mono text-xs"
               placeholder="123456789"
               required
             />

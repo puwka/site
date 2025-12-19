@@ -147,7 +147,7 @@ export default function LogoAdminPanel() {
 
   return (
     <div className="space-y-6">
-      <Card className="border-zinc-800 bg-zinc-900/60">
+      <Card className="border-border bg-card/60">
         <CardHeader>
           <CardTitle className="font-[var(--font-oswald)] text-xl uppercase flex items-center gap-2">
             <ImageIcon className="w-5 h-5" />
@@ -156,7 +156,7 @@ export default function LogoAdminPanel() {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Переключатель включения/выключения */}
-          <div className="p-4 rounded-lg border border-zinc-800 bg-zinc-950/60 flex items-center justify-between gap-4">
+          <div className="p-4 rounded-lg border border-border bg-background/60 flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium text-foreground">
                 Отображать логотип
@@ -189,7 +189,7 @@ export default function LogoAdminPanel() {
               Логотип для светлой темы
             </label>
             <div className="grid grid-cols-1 md:grid-cols-[2fr,1.2fr] gap-4 items-center">
-              <div className="h-32 rounded-xl border border-zinc-800 overflow-hidden bg-white flex items-center justify-center">
+              <div className="h-32 rounded-xl border border-border overflow-hidden bg-white flex items-center justify-center">
                 {config.logoUrl ? (
                   <img
                     src={config.logoUrl}
@@ -214,7 +214,7 @@ export default function LogoAdminPanel() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="justify-center border-dashed border-[oklch(0.75_0.18_50)]/40 bg-zinc-950/60 hover:bg-zinc-900 hover:border-[oklch(0.75_0.18_50)] text-xs sm:text-sm"
+                    className="justify-center border-dashed border-[oklch(0.75_0.18_50)]/40 bg-background/60 hover:bg-secondary hover:border-[oklch(0.75_0.18_50)] text-xs sm:text-sm"
                     onClick={() => logoFileInputRef.current?.click()}
                     disabled={isUploadingLogo}
                   >
@@ -241,7 +241,7 @@ export default function LogoAdminPanel() {
                   onChange={(e) =>
                     setConfig((prev) => ({ ...prev, logoUrl: e.target.value }))
                   }
-                  className="bg-zinc-950 border-zinc-800"
+                  className="bg-background border-border"
                 />
               </div>
             </div>
@@ -253,7 +253,7 @@ export default function LogoAdminPanel() {
               Логотип для тёмной темы
             </label>
             <div className="grid grid-cols-1 md:grid-cols-[2fr,1.2fr] gap-4 items-center">
-              <div className="h-32 rounded-xl border border-zinc-800 overflow-hidden bg-zinc-900 flex items-center justify-center">
+              <div className="h-32 rounded-xl border border-border overflow-hidden bg-zinc-900 flex items-center justify-center">
                 {config.logoDarkUrl ? (
                   <img
                     src={config.logoDarkUrl}
@@ -278,7 +278,7 @@ export default function LogoAdminPanel() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="justify-center border-dashed border-[oklch(0.75_0.18_50)]/40 bg-zinc-950/60 hover:bg-zinc-900 hover:border-[oklch(0.75_0.18_50)] text-xs sm:text-sm"
+                    className="justify-center border-dashed border-[oklch(0.75_0.18_50)]/40 bg-background/60 hover:bg-secondary hover:border-[oklch(0.75_0.18_50)] text-xs sm:text-sm"
                     onClick={() => logoDarkFileInputRef.current?.click()}
                     disabled={isUploadingLogoDark}
                   >
@@ -305,7 +305,7 @@ export default function LogoAdminPanel() {
                   onChange={(e) =>
                     setConfig((prev) => ({ ...prev, logoDarkUrl: e.target.value }))
                   }
-                  className="bg-zinc-950 border-zinc-800"
+                  className="bg-background border-border"
                 />
               </div>
             </div>

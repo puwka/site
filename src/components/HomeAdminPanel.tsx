@@ -208,7 +208,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
   return (
     <div className="space-y-8">
       {/* Верхний summary-блок */}
-      <Card className="border-zinc-800 bg-zinc-900/60">
+      <Card className="border-border bg-card/60">
         <CardContent className="p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-[oklch(0.75_0.18_50)]/15 flex items-center justify-center">
@@ -229,7 +229,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
       {/* Две колонки: слева — блоки, справа — содержимое выбранного блока */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Левый столбец: список блоков */}
-        <Card className="border-zinc-800 bg-zinc-900/70 lg:col-span-1">
+        <Card className="border-border bg-card/70 lg:col-span-1">
           <CardHeader>
             <CardTitle className="font-[var(--font-oswald)] text-lg uppercase flex items-center gap-2">
               <LayoutPanelTop className="w-4 h-4" />
@@ -245,7 +245,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                 className={`w-full text-left px-3 py-2 rounded-lg border flex items-center justify-between gap-3 transition-colors ${
                   activeSection === section
                     ? "border-[oklch(0.75_0.18_50)] bg-[oklch(0.75_0.18_50)]/10 text-foreground"
-                    : "border-zinc-800 bg-zinc-900/40 text-muted-foreground hover:border-zinc-700 hover:text-foreground"
+                    : "border-border bg-card/40 text-muted-foreground hover:border-border hover:text-foreground"
                 }`}
               >
                 <span className="text-sm">{sectionLabels[section]}</span>
@@ -284,7 +284,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
         </Card>
 
         {/* Правый столбец: редактор выбранного блока */}
-        <Card className="border-zinc-800 bg-zinc-900/70 lg:col-span-2">
+        <Card className="border-border bg-card/70 lg:col-span-2">
           <CardHeader>
             <CardTitle className="font-[var(--font-oswald)] text-lg uppercase flex items-center gap-2">
               {activeSection === "hero" && <Info className="w-4 h-4" />}
@@ -303,7 +303,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                     Фоновое изображение Hero
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-[2fr,1.2fr] gap-4 items-center">
-                    <div className="h-32 rounded-xl border border-zinc-800 overflow-hidden bg-zinc-950">
+                    <div className="h-32 rounded-xl border border-border overflow-hidden bg-background">
                       {images.heroBg ? (
                         <div
                           className="w-full h-full bg-cover bg-center"
@@ -331,7 +331,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                         <Button
                           type="button"
                           variant="outline"
-                          className="justify-center border-dashed border-[oklch(0.75_0.18_50)]/40 bg-zinc-950/60 hover:bg-zinc-900 hover:border-[oklch(0.75_0.18_50)] text-xs sm:text-sm"
+                          className="justify-center border-dashed border-[oklch(0.75_0.18_50)]/40 bg-background/60 hover:bg-secondary hover:border-[oklch(0.75_0.18_50)] text-xs sm:text-sm"
                           onClick={() => heroFileInputRef.current?.click()}
                         >
                           Загрузить изображение с устройства
@@ -347,7 +347,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                         onChange={(e) =>
                           setImages((prev) => ({ ...prev, heroBg: e.target.value }))
                         }
-                        className="bg-zinc-950 border-zinc-800"
+                        className="bg-background border-border"
                       />
                     </div>
                   </div>
@@ -361,12 +361,12 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                     onChange={(e) =>
                       setTexts({ ...texts, heroSubtitle: e.target.value })
                     }
-                    className="bg-zinc-950 border-zinc-800 min-h-[140px]"
+                    className="bg-background border-border min-h-[140px]"
                   />
                 </div>
 
                 {/* Переключатель формы заявки на первом экране */}
-                <div className="mt-4 p-4 rounded-lg border border-zinc-800 bg-zinc-950/60 flex items-center justify-between gap-4">
+                <div className="mt-4 p-4 rounded-lg border border-border bg-background/60 flex items-center justify-between gap-4">
                   <div>
                     <p className="text-sm font-medium text-foreground">
                       Форма заявки на первом экране
@@ -407,7 +407,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                       onChange={(e) =>
                         setTexts({ ...texts, servicesTitle: e.target.value })
                       }
-                      className="bg-zinc-950 border-zinc-800"
+                      className="bg-background border-border"
                     />
                   </div>
                   <div>
@@ -419,13 +419,13 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                       onChange={(e) =>
                         setTexts({ ...texts, servicesSubtitle: e.target.value })
                       }
-                      className="bg-zinc-950 border-zinc-800 min-h-[120px]"
+                      className="bg-background border-border min-h-[120px]"
                     />
                   </div>
                 </div>
 
                 {/* Управление карточками услуг на главной */}
-                <div className="pt-4 border-t border-zinc-800 space-y-4">
+                <div className="pt-4 border-t border-border space-y-4">
                   <div className="flex items-center justify-between gap-4">
                     <div>
                       <p className="text-sm font-medium text-foreground">
@@ -458,7 +458,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                     {services.map((service) => (
                       <div
                         key={service.id}
-                        className="rounded-lg border border-zinc-800 bg-zinc-950/60 p-3 flex flex-col gap-2"
+                        className="rounded-lg border border-border bg-background/60 p-3 flex flex-col gap-2"
                       >
                         <div className="flex items-center gap-2">
                           <Input
@@ -469,7 +469,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                               })
                             }
                             placeholder="Название услуги"
-                            className="bg-zinc-950 border-zinc-800 text-sm"
+                            className="bg-background border-border text-sm"
                           />
                           <Button
                             type="button"
@@ -489,7 +489,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                             })
                           }
                           placeholder="Краткое описание услуги"
-                          className="bg-zinc-950 border-zinc-800 text-xs min-h-[60px]"
+                          className="bg-background border-border text-xs min-h-[60px]"
                         />
                         <Input
                           value={service.link || ""}
@@ -499,7 +499,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                             })
                           }
                           placeholder="Ссылка на страницу услуги (например, /services/construction)"
-                          className="bg-zinc-950 border-zinc-800 text-xs"
+                          className="bg-background border-border text-xs"
                         />
                       </div>
                     ))}
@@ -526,7 +526,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                     Фоновое изображение блока «О компании»
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-[2fr,1.2fr] gap-4 items-center">
-                    <div className="h-32 rounded-xl border border-zinc-800 overflow-hidden bg-zinc-950">
+                    <div className="h-32 rounded-xl border border-border overflow-hidden bg-background">
                       {images.aboutBg ? (
                         <div
                           className="w-full h-full bg-cover bg-center"
@@ -553,7 +553,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                         <Button
                           type="button"
                           variant="outline"
-                          className="justify-center border-dashed border-[oklch(0.75_0.18_50)]/40 bg-zinc-950/60 hover:bg-zinc-900 hover:border-[oklch(0.75_0.18_50)] text-xs sm:text-sm"
+                          className="justify-center border-dashed border-[oklch(0.75_0.18_50)]/40 bg-background/60 hover:bg-secondary hover:border-[oklch(0.75_0.18_50)] text-xs sm:text-sm"
                           onClick={() => aboutFileInputRef.current?.click()}
                         >
                           Загрузить изображение с устройства
@@ -569,7 +569,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                         onChange={(e) =>
                           setImages((prev) => ({ ...prev, aboutBg: e.target.value }))
                         }
-                        className="bg-zinc-950 border-zinc-800"
+                        className="bg-background border-border"
                       />
                     </div>
                   </div>
@@ -583,7 +583,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                     onChange={(e) =>
                       setTexts({ ...texts, aboutTitle: e.target.value })
                     }
-                    className="bg-zinc-950 border-zinc-800"
+                    className="bg-background border-border"
                   />
                 </div>
                 <div>
@@ -595,7 +595,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                     onChange={(e) =>
                       setTexts({ ...texts, aboutText: e.target.value })
                     }
-                    className="bg-zinc-950 border-zinc-800 min-h-[180px]"
+                    className="bg-background border-border min-h-[180px]"
                   />
                 </div>
               </div>
@@ -611,7 +611,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                   onChange={(e) =>
                     setTexts({ ...texts, howTitle: e.target.value })
                   }
-                  className="bg-zinc-950 border-zinc-800"
+                  className="bg-background border-border"
                 />
               </div>
             )}
@@ -626,7 +626,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                   onChange={(e) =>
                     setTexts({ ...texts, contactsCta: e.target.value })
                   }
-                  className="bg-zinc-950 border-zinc-800 min-h-[140px]"
+                  className="bg-background border-border min-h-[140px]"
                 />
               </div>
             )}

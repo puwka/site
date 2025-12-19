@@ -21,10 +21,10 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden lg:block fixed left-0 top-0 h-screen w-[280px] bg-zinc-900 border-r border-zinc-800 z-40">
+    <aside className="hidden lg:block fixed left-0 top-0 h-screen w-[280px] bg-card border-r border-border z-40">
       <div className="p-6 h-full flex flex-col">
         <div className="mb-8">
-          <h2 className="font-[var(--font-oswald)] text-xl font-bold uppercase text-white mb-2">
+          <h2 className="font-[var(--font-oswald)] text-xl font-bold uppercase text-foreground mb-2">
             Панель управления
           </h2>
           <p className="text-xs text-muted-foreground">
@@ -47,7 +47,7 @@ export default function AdminSidebar() {
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                   isActive
                     ? "bg-[oklch(0.75_0.18_50)]/20 text-[oklch(0.75_0.18_50)] border-l-2 border-[oklch(0.75_0.18_50)]"
-                    : "text-muted-foreground hover:text-white hover:bg-zinc-800"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -61,7 +61,7 @@ export default function AdminSidebar() {
           <Button
             type="submit"
             variant="ghost"
-            className="w-full justify-start text-muted-foreground hover:text-white hover:bg-zinc-800"
+            className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-secondary"
           >
             <LogOut className="w-5 h-5 mr-3" />
             Выйти
