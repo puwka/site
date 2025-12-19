@@ -88,12 +88,51 @@ export async function POST(req: NextRequest) {
     console.log("Updating home_admin images...");
     const { data: currentData, error: selectError } = await supabaseAdmin
       .from("home_admin")
-      .select("images")
+      .select("blocks, texts, images")
       .eq("id", HOME_ID)
       .maybeSingle();
 
     if (selectError) {
       console.error("Supabase select error:", selectError);
+      // Если записи нет, создаём с дефолтными значениями
+      const defaultBlocks = {
+        hero: true,
+        heroForm: true,
+        services: true,
+        about: true,
+        howItWorks: true,
+        contacts: true,
+      };
+      const defaultTexts = {
+        heroSubtitle: "",
+        servicesTitle: "",
+        servicesSubtitle: "",
+        aboutTitle: "",
+        aboutText: "",
+        howTitle: "",
+        contactsCta: "",
+      };
+      const { error: createError } = await supabaseAdmin
+        .from("home_admin")
+        .insert({
+          id: HOME_ID,
+          blocks: defaultBlocks,
+          texts: defaultTexts,
+          images: { [safeField]: publicUrl },
+        });
+      
+      if (createError) {
+        console.error("Supabase create error:", createError);
+        return NextResponse.json(
+          { 
+            success: false, 
+            message: `Ошибка создания записи: ${createError.message || JSON.stringify(createError)}` 
+          },
+          { status: 500 }
+        );
+      }
+      
+      return NextResponse.json({ success: true, url: publicUrl });
     }
 
     const currentImages = currentData?.images || {};
@@ -104,11 +143,29 @@ export async function POST(req: NextRequest) {
 
     console.log("Updated images object:", updatedImages);
 
+    // Важно: передаём все обязательные поля (blocks, texts, images)
     const { error: updateError } = await supabaseAdmin
       .from("home_admin")
       .upsert(
         {
           id: HOME_ID,
+          blocks: currentData?.blocks || {
+            hero: true,
+            heroForm: true,
+            services: true,
+            about: true,
+            howItWorks: true,
+            contacts: true,
+          },
+          texts: currentData?.texts || {
+            heroSubtitle: "",
+            servicesTitle: "",
+            servicesSubtitle: "",
+            aboutTitle: "",
+            aboutText: "",
+            howTitle: "",
+            contactsCta: "",
+          },
           images: updatedImages,
         },
         { onConflict: "id" }
