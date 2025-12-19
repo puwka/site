@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
-const uploadsDir = path.join(process.cwd(), "public", "uploads");
-const homeFilePath = path.join(process.cwd(), "src/data/home-admin.json");
+const HOME_ID = 1;
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,43 +16,79 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    await fs.mkdir(uploadsDir, { recursive: true });
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json(
+        { success: false, message: "Недопустимый тип файла" },
+        { status: 400 }
+      );
+    }
+
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      return NextResponse.json(
+        { success: false, message: "Файл слишком большой. Максимальный размер — 5МБ." },
+        { status: 400 }
+      );
+    }
 
     const safeField = field === "heroBg" || field === "aboutBg" ? field : "image";
-    const ext = path.extname(file.name) || ".jpg";
-    const fileName = `${safeField}-${Date.now()}${ext}`;
-    const filePath = path.join(uploadsDir, fileName);
+    const ext = file.name.split(".").pop() || "jpg";
+    const fileName = `${safeField}-${Date.now()}.${ext}`;
+    const filepath = `home-images/${fileName}`;
 
-    await fs.writeFile(filePath, buffer);
+    const buffer = Buffer.from(await file.arrayBuffer());
 
-    const publicUrl = `/uploads/${fileName}`;
+    // Загружаем в Supabase Storage
+    const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+      .from("uploads")
+      .upload(filepath, buffer, {
+        contentType: file.type,
+        upsert: false,
+      });
 
-    // Обновляем JSON-конфиг home-admin
-    try {
-      const jsonRaw = await fs.readFile(homeFilePath, "utf8");
-      const data = JSON.parse(jsonRaw);
-      data.images = {
-        ...(data.images || {}),
-        [safeField]: publicUrl,
-      };
-      await fs.writeFile(homeFilePath, JSON.stringify(data, null, 2), "utf8");
-    } catch {
-      // если файла ещё нет — создаём минимальный
-      const data = {
-        blocks: {
-          hero: true,
-          services: true,
-          about: true,
-          howItWorks: true,
-          contacts: true,
+    if (uploadError) {
+      console.error("Supabase Storage upload error:", uploadError);
+      return NextResponse.json(
+        { success: false, message: "Ошибка загрузки файла в хранилище" },
+        { status: 500 }
+      );
+    }
+
+    // Получаем публичный URL
+    const {
+      data: { publicUrl },
+    } = supabaseAdmin.storage.from("uploads").getPublicUrl(filepath);
+
+    // Обновляем images в таблице home_admin
+    const { data: currentData } = await supabaseAdmin
+      .from("home_admin")
+      .select("images")
+      .eq("id", HOME_ID)
+      .maybeSingle();
+
+    const currentImages = currentData?.images || {};
+    const updatedImages = {
+      ...currentImages,
+      [safeField]: publicUrl,
+    };
+
+    const { error: updateError } = await supabaseAdmin
+      .from("home_admin")
+      .upsert(
+        {
+          id: HOME_ID,
+          images: updatedImages,
         },
-        texts: {},
-        images: {
-          [safeField]: publicUrl,
-        },
-      };
-      await fs.writeFile(homeFilePath, JSON.stringify(data, null, 2), "utf8");
+        { onConflict: "id" }
+      );
+
+    if (updateError) {
+      console.error("Supabase update images error:", updateError);
+      return NextResponse.json(
+        { success: false, message: "Ошибка обновления данных" },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ success: true, url: publicUrl });

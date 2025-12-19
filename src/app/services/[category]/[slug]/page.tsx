@@ -31,14 +31,18 @@ export async function generateStaticParams() {
   const overrideParams: StaticParam[] = Object.values(overrides)
     .filter(
       (ov) =>
-        !ov.deleted && ov.slug && ov.categoryId && !services.find((s) => s.id === ov.id)
+        !ov.deleted &&
+        ov.slug &&
+        ov.categoryId &&
+        ov.title && // убеждаемся, что есть хотя бы название
+        !services.find((s) => s.id === ov.id)
     )
     .map((ov) => {
       const category = categories.find((cat) => cat.id === ov.categoryId);
-      if (!category) return null;
+      if (!category || !ov.slug) return null;
       return {
         category: category.slug,
-        slug: ov.slug as string,
+        slug: ov.slug,
       };
     })
     .filter((item): item is StaticParam => item !== null);
@@ -60,7 +64,7 @@ export async function generateMetadata({
   const overrideOnly =
     baseService == null
       ? Object.values(overrides).find(
-          (ov) => !ov.deleted && ov.slug === slug
+          (ov) => !ov.deleted && ov.slug === slug && ov.categoryId
         )
       : undefined;
 
@@ -68,7 +72,7 @@ export async function generateMetadata({
     baseService || overrideFromBase || overrideOnly
       ? {
           ...(baseService || {
-            id: overrideOnly!.id,
+            id: overrideOnly!.id || `service-${slug}`,
             slug: overrideOnly!.slug || slug,
             title: overrideOnly!.title || "Новая услуга",
             description: overrideOnly!.description || "",
@@ -78,6 +82,7 @@ export async function generateMetadata({
             seoText: overrideOnly!.seoText,
             pricingTable: overrideOnly!.pricingTable,
             images: overrideOnly!.images,
+            showOrderForm: overrideOnly!.showOrderForm,
           }),
           ...(overrideFromBase || overrideOnly || {}),
         }
@@ -108,18 +113,20 @@ export default async function ServicePage({
   const baseService = getServiceBySlug(slug);
   const overrideFromBase = baseService ? overrides[baseService.id] : undefined;
 
+  // Ищем услугу только в overrides (если её нет в базовых)
   const overrideOnly =
     baseService == null
       ? Object.values(overrides).find(
-          (ov) => !ov.deleted && ov.slug === slug
+          (ov) => !ov.deleted && ov.slug === slug && ov.categoryId
         )
       : undefined;
 
+  // Собираем финальный объект услуги
   const service: Service | null =
     baseService || overrideFromBase || overrideOnly
       ? {
           ...(baseService || {
-            id: overrideOnly!.id,
+            id: overrideOnly!.id || `service-${slug}`,
             slug: overrideOnly!.slug || slug,
             title: overrideOnly!.title || "Новая услуга",
             description: overrideOnly!.description || "",
@@ -129,6 +136,7 @@ export default async function ServicePage({
             seoText: overrideOnly!.seoText,
             pricingTable: overrideOnly!.pricingTable,
             images: overrideOnly!.images,
+            showOrderForm: overrideOnly!.showOrderForm,
           }),
           ...(overrideFromBase || overrideOnly || {}),
         }
@@ -136,12 +144,16 @@ export default async function ServicePage({
 
   const category = getCategoryBySlug(categorySlug);
 
+  // Проверяем, что услуга существует и не удалена
+  const serviceId = service?.id;
+  const isDeleted = serviceId ? overrides[serviceId]?.deleted : false;
+
   if (
     !service ||
     !category ||
     !service.categoryId ||
     service.categoryId !== category.id ||
-    overrides[service.id]?.deleted
+    isDeleted
   ) {
     notFound();
   }
