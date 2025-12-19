@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
+// Увеличиваем лимит размера тела запроса до 10MB
+export const runtime = "nodejs";
+export const maxDuration = 30;
+
 export async function POST(request: NextRequest) {
   // Проверяем, что переменные окружения установлены
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {

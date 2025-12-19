@@ -111,6 +111,16 @@ export default function ServicesManager() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Проверяем размер файла на клиенте
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      alert(`Файл слишком большой (${(file.size / 1024 / 1024).toFixed(2)} МБ). Максимальный размер — 5МБ.`);
+      if (imageFileInputRef.current) {
+        imageFileInputRef.current.value = "";
+      }
+      return;
+    }
+
     setIsUploadingImage(true);
     try {
       const formData = new FormData();
@@ -121,8 +131,26 @@ export default function ServicesManager() {
         body: formData,
       });
 
+      if (!res.ok) {
+        let errorMessage = `Ошибка ${res.status}: ${res.statusText}`;
+        if (res.status === 413) {
+          errorMessage = "Файл слишком большой. Максимальный размер — 5МБ.";
+        } else {
+          try {
+            const errorData = await res.json();
+            errorMessage = errorData.error || errorData.message || errorMessage;
+          } catch {
+            const text = await res.text();
+            if (text) errorMessage = text.substring(0, 200);
+          }
+        }
+        console.error("Upload error:", errorMessage);
+        alert(errorMessage);
+        return;
+      }
+
       const data = await res.json();
-      if (!res.ok || !data.url) {
+      if (!data.url) {
         const errorMsg = data.error || data.message || "Ошибка загрузки файла";
         console.error("Upload error:", errorMsg, data);
         alert(errorMsg);

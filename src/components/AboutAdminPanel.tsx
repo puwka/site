@@ -100,6 +100,17 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Проверяем размер файла на клиенте
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      alert(`Файл слишком большой (${(file.size / 1024 / 1024).toFixed(2)} МБ). Максимальный размер — 5МБ.`);
+      setStatus("error");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
     setIsUploading(true);
     setStatus("idle");
     try {
@@ -111,8 +122,27 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
         body: formData,
       });
 
+      if (!res.ok) {
+        let errorMessage = `Ошибка ${res.status}: ${res.statusText}`;
+        if (res.status === 413) {
+          errorMessage = "Файл слишком большой. Максимальный размер — 5МБ.";
+        } else {
+          try {
+            const errorData = await res.json();
+            errorMessage = errorData.error || errorData.message || errorMessage;
+          } catch {
+            const text = await res.text();
+            if (text) errorMessage = text.substring(0, 200);
+          }
+        }
+        setStatus("error");
+        console.error("Upload error:", errorMessage);
+        alert(errorMessage);
+        return;
+      }
+
       const data = await res.json();
-      if (!res.ok || !data.url) {
+      if (!data.url) {
         setStatus("error");
         const errorMsg = data.error || data.message || "Ошибка загрузки файла";
         console.error("Upload error:", errorMsg, data);

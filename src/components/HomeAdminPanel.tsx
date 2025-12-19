@@ -107,6 +107,14 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
   };
 
   const handleImageUpload = async (field: "heroBg" | "aboutBg", file: File) => {
+    // Проверяем размер файла на клиенте
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      alert(`Файл слишком большой (${(file.size / 1024 / 1024).toFixed(2)} МБ). Максимальный размер — 5МБ.`);
+      setStatus("error");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("field", field);
@@ -116,6 +124,28 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
         method: "POST",
         body: formData,
       });
+
+      // Проверяем статус ответа перед парсингом JSON
+      if (!res.ok) {
+        let errorMessage = `Ошибка ${res.status}: ${res.statusText}`;
+        if (res.status === 413) {
+          errorMessage = "Файл слишком большой. Максимальный размер — 5МБ.";
+        } else {
+          try {
+            const errorData = await res.json();
+            errorMessage = errorData.message || errorData.error || errorMessage;
+          } catch {
+            // Если ответ не JSON, читаем как текст
+            const text = await res.text();
+            if (text) errorMessage = text.substring(0, 200);
+          }
+        }
+        console.error("Upload failed:", errorMessage);
+        alert(errorMessage);
+        setStatus("error");
+        return;
+      }
+
       const data = await res.json();
       if (data.success && data.url) {
         setImages((prev) => ({ ...prev, [field]: data.url }));
