@@ -131,7 +131,7 @@ async function readHome(): Promise<HomeAdminData> {
     console.error("Supabase read home services error:", servicesError.message);
   }
 
-  let services: HomeServiceItem[] = defaultHomeData.services;
+  let services: HomeServiceItem[] = defaultHomeData.services ?? [];
 
   if (servicesRows && servicesRows.length > 0) {
     services = servicesRows.map(
