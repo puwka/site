@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { logoutAction } from "@/app/actions/adminAuth";
-import { Settings, Package, FileText, LogOut, Home, PhoneCall, FileSignature, Shield, Bell } from "lucide-react";
+import { Settings, Package, FileText, LogOut, Home, PhoneCall, FileSignature, Shield, Bell, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
@@ -11,6 +11,7 @@ const navItems = [
   { href: "/admin/services", label: "Услуги", icon: Package },
   { href: "/admin/about", label: "О нас", icon: FileText },
   { href: "/admin/contacts", label: "Контакты", icon: PhoneCall },
+  { href: "/admin/logo", label: "Логотип", icon: ImageIcon },
   { href: "/admin/docs", label: "Документы", icon: FileSignature },
   { href: "/admin/notifications", label: "Уведомления", icon: Bell },
   { href: "/admin/security", label: "Безопасность", icon: Shield },

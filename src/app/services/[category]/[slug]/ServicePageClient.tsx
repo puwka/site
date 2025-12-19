@@ -199,7 +199,7 @@ export default function ServicePageClient({ service, category }: ServicePageClie
                 transition={{ duration: 0.6 }}
               >
                 <h2 className="font-[var(--font-oswald)] text-3xl md:text-4xl font-bold uppercase mb-6">
-                  Описание услуги
+                  Описание
                 </h2>
                 <div className="prose prose-invert max-w-none space-y-4">
                   {localService.fullDescription ? (

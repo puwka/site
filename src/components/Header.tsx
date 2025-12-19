@@ -78,8 +78,48 @@ export default function Header() {
   const phoneNumber = effectiveContacts.phoneNumber;
   const phoneLink = phoneNumber.replace(/[^+\d]/g, "");
 
-  // Logo based on theme
-  const logoSrc = theme === "dark" ? "/logo_white.png" : "/logo_black.png";
+  // Logo settings from admin
+  const [logoConfig, setLogoConfig] = useState<{
+    enabled: boolean;
+    logoUrl?: string;
+    logoDarkUrl?: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const loadLogoConfig = async () => {
+      try {
+        const res = await fetch("/api/admin/page-texts?key=logo_config", {
+          cache: "no-store",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (typeof data.text === "string" && data.text.trim().length > 0) {
+            try {
+              const parsed = JSON.parse(data.text);
+              setLogoConfig(parsed);
+            } catch {
+              // Используем дефолтные значения
+            }
+          }
+        }
+      } catch {
+        // Используем дефолтные значения
+      }
+    };
+    loadLogoConfig();
+  }, []);
+
+  // Logo based on theme and admin settings
+  const logoSrc =
+    logoConfig && !logoConfig.enabled
+      ? null
+      : logoConfig && theme === "dark" && logoConfig.logoDarkUrl
+      ? logoConfig.logoDarkUrl
+      : logoConfig && theme !== "dark" && logoConfig.logoUrl
+      ? logoConfig.logoUrl
+      : theme === "dark"
+      ? "/logo_white.png"
+      : "/logo_black.png";
 
   return (
     <>
@@ -108,16 +148,18 @@ export default function Header() {
                 router.push("/");
               }}
             >
-              <div className="relative h-14 md:h-16 w-auto">
-                <Image
-                  src={logoSrc}
-                  alt="Тяжёлый Профиль"
-                  width={220}
-                  height={64}
-                  className="h-full w-auto"
-                  priority
-                />
-              </div>
+              {logoSrc && (
+                <div className="relative h-14 md:h-16 w-auto">
+                  <Image
+                    src={logoSrc}
+                    alt="Тяжёлый Профиль"
+                    width={220}
+                    height={64}
+                    className="h-full w-auto"
+                    priority
+                  />
+                </div>
+              )}
               <div className="hidden sm:block">
                 <span className="font-[var(--font-oswald)] text-base md:text-lg lg:text-xl font-bold uppercase tracking-[0.18em] dark:text-white light:text-zinc-900">
                   ТЯЖЁЛЫЙ{" "}
