@@ -121,9 +121,13 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
         setImages((prev) => ({ ...prev, [field]: data.url }));
         setStatus("success");
       } else {
+        console.error("Upload failed:", data.message || data.error);
+        alert(data.message || data.error || "Ошибка загрузки файла");
         setStatus("error");
       }
-    } catch {
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert(`Ошибка загрузки: ${error instanceof Error ? error.message : String(error)}`);
       setStatus("error");
     }
   };

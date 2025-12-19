@@ -123,7 +123,9 @@ export default function ServicesManager() {
 
       const data = await res.json();
       if (!res.ok || !data.url) {
-        alert(data.error || "Ошибка загрузки файла");
+        const errorMsg = data.error || data.message || "Ошибка загрузки файла";
+        console.error("Upload error:", errorMsg, data);
+        alert(errorMsg);
         return;
       }
 

@@ -114,7 +114,9 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
       const data = await res.json();
       if (!res.ok || !data.url) {
         setStatus("error");
-        alert(data.error || "Ошибка загрузки файла");
+        const errorMsg = data.error || data.message || "Ошибка загрузки файла";
+        console.error("Upload error:", errorMsg, data);
+        alert(errorMsg);
         return;
       }
 

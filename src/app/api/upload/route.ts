@@ -2,6 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function POST(request: NextRequest) {
+  // Проверяем, что переменные окружения установлены
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error("Supabase env vars missing");
+    return NextResponse.json(
+      { 
+        success: false,
+        error: "Конфигурация Supabase не настроена. Проверьте переменные окружения." 
+      },
+      { status: 500 }
+    );
+  }
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
@@ -40,6 +52,8 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     // Загружаем в Supabase Storage (bucket должен называться "uploads" и быть публичным)
+    console.log("Uploading to Supabase Storage:", { filepath, size: buffer.length, type: file.type });
+    
     const { data, error } = await supabaseAdmin.storage
       .from("uploads")
       .upload(filepath, buffer, {
@@ -50,21 +64,32 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error("Supabase Storage upload error:", error);
       return NextResponse.json(
-        { error: "Ошибка загрузки файла в хранилище" },
+        { 
+          success: false,
+          error: `Ошибка загрузки файла в хранилище: ${error.message || JSON.stringify(error)}. Убедитесь, что bucket "uploads" создан и публичный.` 
+        },
         { status: 500 }
       );
     }
+
+    console.log("File uploaded successfully:", data);
 
     // Получаем публичный URL
     const {
       data: { publicUrl },
     } = supabaseAdmin.storage.from("uploads").getPublicUrl(filepath);
 
+    console.log("Public URL:", publicUrl);
+
     return NextResponse.json({ success: true, url: publicUrl });
   } catch (error) {
     console.error("Error uploading file:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { error: "Ошибка загрузки файла" },
+      { 
+        success: false,
+        error: `Ошибка загрузки файла: ${errorMessage}` 
+      },
       { status: 500 }
     );
   }

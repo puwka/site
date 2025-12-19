@@ -50,7 +50,10 @@ export async function POST(req: NextRequest) {
     if (uploadError) {
       console.error("Supabase Storage upload error:", uploadError);
       return NextResponse.json(
-        { success: false, message: "Ошибка загрузки файла в хранилище" },
+        { 
+          success: false, 
+          message: `Ошибка загрузки файла в хранилище: ${uploadError.message || JSON.stringify(uploadError)}` 
+        },
         { status: 500 }
       );
     }
@@ -94,8 +97,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, url: publicUrl });
   } catch (error) {
     console.error("Upload error:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { success: false, message: "Ошибка загрузки файла" },
+      { 
+        success: false, 
+        message: `Ошибка загрузки файла: ${errorMessage}` 
+      },
       { status: 500 }
     );
   }
