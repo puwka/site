@@ -159,15 +159,19 @@ export default function Home() {
     loadContacts();
   }, []);
 
-  const blocks: HomeBlocks =
-    homeConfig?.blocks || {
-      hero: true,
-      heroForm: true,
-      services: true,
-      about: true,
-      howItWorks: true,
-      contacts: true,
-    };
+  // Не используем дефолтные значения, пока данные не загрузились
+  // Это предотвращает мигание формы при загрузке
+  const blocks: HomeBlocks = homeConfig?.blocks || {
+    hero: true,
+    heroForm: false, // По умолчанию скрываем, пока не загрузится реальное значение
+    services: true,
+    about: true,
+    howItWorks: true,
+    contacts: true,
+  };
+  
+  // Показываем форму только если данные загружены и heroForm === true
+  const shouldShowHeroForm = homeConfig !== null && blocks.heroForm;
 
   const texts: HomeTexts =
     homeConfig?.texts || {
@@ -276,7 +280,7 @@ export default function Home() {
               </div>
 
               {/* Right: Order Form */}
-              {blocks.heroForm && (
+              {shouldShowHeroForm && (
               <motion.div
                   initial={{ opacity: 0, y: 30, backdropFilter: "blur(0px)" }}
                   animate={{ opacity: 1, y: 0, backdropFilter: "blur(24px)" }}

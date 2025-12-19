@@ -99,7 +99,12 @@ export default function ContactsPageClient() {
     loadConfig();
   }, []);
 
+  // Используем config, если он загружен, иначе дефолтные значения
+  // Но для showForm проверяем явно, чтобы не показывать форму до загрузки
   const effectiveConfig = config || defaultContactsConfig;
+  
+  // Показываем форму только если данные загружены и showForm === true
+  const shouldShowForm = config !== null && config.showForm === true;
 
   const phoneLink = effectiveConfig.phoneNumber.replace(/[^+\d]/g, "");
   const whatsappLink =
@@ -169,10 +174,10 @@ export default function ContactsPageClient() {
       )}
 
       {/* Main Content Grid */}
-      {(effectiveConfig.showInfo || effectiveConfig.showForm) && (
+      {(effectiveConfig.showInfo || shouldShowForm) && (
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className={`grid grid-cols-1 gap-12 ${effectiveConfig.showInfo && effectiveConfig.showForm ? "lg:grid-cols-2" : ""}`}>
+            <div className={`grid grid-cols-1 gap-12 ${effectiveConfig.showInfo && shouldShowForm ? "lg:grid-cols-2" : ""}`}>
               {/* Left Column: Contact Information */}
               {effectiveConfig.showInfo && (
                 <motion.div
@@ -321,7 +326,7 @@ export default function ContactsPageClient() {
               )}
 
               {/* Right Column: Feedback Form */}
-              {effectiveConfig.showForm && (
+              {shouldShowForm && (
                 <motion.div
                   initial={{ opacity: 0, x: 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
