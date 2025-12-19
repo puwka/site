@@ -5,6 +5,10 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
+// В Next.js App Router лимит body по умолчанию 4.5MB, но для больших файлов
+// лучше использовать streaming или увеличить через конфигурацию
+export const dynamic = "force-dynamic";
+
 const HOME_ID = 1;
 
 export async function POST(req: NextRequest) {
@@ -31,6 +35,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Логируем размер файла для отладки
+    console.log(`Received file: ${file.name}, size: ${(file.size / 1024 / 1024).toFixed(2)} MB (${file.size} bytes)`);
 
     const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
     if (!allowedTypes.includes(file.type)) {

@@ -109,8 +109,11 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
   const handleImageUpload = async (field: "heroBg" | "aboutBg", file: File) => {
     // Проверяем размер файла на клиенте
     const maxSize = 10 * 1024 * 1024; // 10MB
+    const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
+    console.log(`File size: ${fileSizeMB} MB (${file.size} bytes), max: ${maxSize} bytes`);
+    
     if (file.size > maxSize) {
-      alert(`Файл слишком большой (${(file.size / 1024 / 1024).toFixed(2)} МБ). Максимальный размер — 10МБ.`);
+      alert(`Файл слишком большой (${fileSizeMB} МБ). Максимальный размер — 10МБ.`);
       setStatus("error");
       return;
     }
