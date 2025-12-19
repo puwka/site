@@ -108,9 +108,9 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
 
   const handleImageUpload = async (field: "heroBg" | "aboutBg", file: File) => {
     // Проверяем размер файла на клиенте
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
-      alert(`Файл слишком большой (${(file.size / 1024 / 1024).toFixed(2)} МБ). Максимальный размер — 5МБ.`);
+      alert(`Файл слишком большой (${(file.size / 1024 / 1024).toFixed(2)} МБ). Максимальный размер — 10МБ.`);
       setStatus("error");
       return;
     }
@@ -129,7 +129,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
       if (!res.ok) {
         let errorMessage = `Ошибка ${res.status}: ${res.statusText}`;
         if (res.status === 413) {
-          errorMessage = "Файл слишком большой. Максимальный размер — 5МБ.";
+          errorMessage = "Файл слишком большой. Максимальный размер — 10МБ.";
         } else {
           try {
             const errorData = await res.json();
@@ -334,7 +334,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                           Загрузить изображение с устройства
                         </Button>
                         <p className="text-[10px] text-muted-foreground">
-                          PNG / JPG до 5МБ. Рекомендуемый размер ~ 1920×1080.
+                          PNG / JPG до 10МБ. Рекомендуемый размер ~ 1920×1080.
                         </p>
                       </div>
                       <Input
@@ -556,7 +556,7 @@ export default function HomeAdminPanel({ initialData }: HomeAdminPanelProps) {
                           Загрузить изображение с устройства
                         </Button>
                         <p className="text-[10px] text-muted-foreground">
-                          PNG / JPG до 5МБ. Рекомендуемый размер ~ 1920×1080.
+                          PNG / JPG до 10МБ. Рекомендуемый размер ~ 1920×1080.
                         </p>
                       </div>
                       <Input

@@ -40,10 +40,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
       return NextResponse.json(
-        { success: false, message: "Файл слишком большой. Максимальный размер — 5МБ." },
+        { success: false, message: "Файл слишком большой. Максимальный размер — 10МБ." },
         { status: 400 }
       );
     }

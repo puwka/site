@@ -101,9 +101,9 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
     if (!file) return;
 
     // Проверяем размер файла на клиенте
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
-      alert(`Файл слишком большой (${(file.size / 1024 / 1024).toFixed(2)} МБ). Максимальный размер — 5МБ.`);
+      alert(`Файл слишком большой (${(file.size / 1024 / 1024).toFixed(2)} МБ). Максимальный размер — 10МБ.`);
       setStatus("error");
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -125,7 +125,7 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
       if (!res.ok) {
         let errorMessage = `Ошибка ${res.status}: ${res.statusText}`;
         if (res.status === 413) {
-          errorMessage = "Файл слишком большой. Максимальный размер — 5МБ.";
+          errorMessage = "Файл слишком большой. Максимальный размер — 10МБ.";
         } else {
           try {
             const errorData = await res.json();
@@ -263,7 +263,7 @@ export default function AboutAdminPanel({ initialMissionText, initialConfig }: A
                 )}
               </Button>
               <span className="text-[10px] text-muted-foreground">
-                JPG / PNG / WebP до 5МБ
+                JPG / PNG / WebP до 10МБ
               </span>
             </div>
 
