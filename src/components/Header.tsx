@@ -171,18 +171,25 @@ export default function Header() {
             </motion.button>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-6">
               <MegaMenu />
               {navLinks.filter((link) => link.label !== "Услуги").map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
+                  className="text-base font-semibold dark:text-white light:text-zinc-900 hover:text-[oklch(0.75_0.18_50)] transition-colors relative group px-3 py-2 rounded-lg hover:bg-[oklch(0.75_0.18_50)]/10"
                 >
                   {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[oklch(0.75_0.18_50)] transition-all duration-300 group-hover:w-full" />
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[oklch(0.75_0.18_50)] transition-all duration-300 group-hover:w-3/4" />
                 </Link>
               ))}
+              <Link
+                href="/services"
+                className="text-base font-semibold dark:text-white light:text-zinc-900 hover:text-[oklch(0.75_0.18_50)] transition-colors relative group px-3 py-2 rounded-lg hover:bg-[oklch(0.75_0.18_50)]/10"
+              >
+                Каталог
+                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[oklch(0.75_0.18_50)] transition-all duration-300 group-hover:w-3/4" />
+              </Link>
             </nav>
 
             {/* Desktop CTA */}
@@ -271,7 +278,7 @@ export default function Header() {
               transition={{ duration: 0.3, ease: "easeOut" }}
               className="absolute top-0 right-0 h-full w-[80%] max-w-sm bg-background border-l border-border p-8 pt-24"
             >
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-4">
                 {navLinks.map((link, index) => (
                   <motion.div
                     key={link.href}
@@ -282,12 +289,25 @@ export default function Header() {
                     <Link
                       href={link.href}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-lg font-medium text-left hover:text-[oklch(0.75_0.18_50)] transition-colors"
+                      className="text-lg font-semibold text-left dark:text-white light:text-zinc-900 hover:text-[oklch(0.75_0.18_50)] transition-colors px-3 py-2 rounded-lg hover:bg-[oklch(0.75_0.18_50)]/10"
                     >
                       {link.label}
                     </Link>
                   </motion.div>
                 ))}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navLinks.length * 0.1 }}
+                >
+                  <Link
+                    href="/services"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-lg font-semibold text-left dark:text-white light:text-zinc-900 hover:text-[oklch(0.75_0.18_50)] transition-colors px-3 py-2 rounded-lg hover:bg-[oklch(0.75_0.18_50)]/10"
+                  >
+                    Каталог
+                  </Link>
+                </motion.div>
                 <hr className="border-border my-4" />
                 <a
                   href={`tel:${phoneLink}`}

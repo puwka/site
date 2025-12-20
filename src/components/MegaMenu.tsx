@@ -72,7 +72,7 @@ export default function MegaMenu() {
     >
       <Link
         href="/services"
-        className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group flex items-center gap-1"
+        className="text-base font-semibold dark:text-white light:text-zinc-900 hover:text-[oklch(0.75_0.18_50)] transition-colors relative group flex items-center gap-1 px-3 py-2 rounded-lg hover:bg-[oklch(0.75_0.18_50)]/10"
       >
         Услуги
         <ChevronDown

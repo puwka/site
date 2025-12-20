@@ -13,7 +13,11 @@ export function middleware(request: NextRequest) {
     }
   }
   
-  return NextResponse.next();
+  // Передаем путь в заголовке для использования в layout
+  const response = NextResponse.next();
+  response.headers.set("x-pathname", pathname);
+  
+  return response;
 }
 
 export const config = {

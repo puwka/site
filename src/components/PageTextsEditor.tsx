@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Save } from "lucide-react";
 import { updatePageText } from "@/app/actions/adminPages";
 
-type TabId = "home" | "about" | "contacts";
+type TabId = "home" | "about" | "contacts" | "services";
 
 const homeTextBlocks = [
   {
@@ -28,9 +28,25 @@ const aboutTextBlocks = [
   },
 ];
 
+const servicesTextBlocks = [
+  {
+    key: "services_page_title",
+    label: "Заголовок страницы каталога",
+    defaultValue: "Каталог услуг:",
+  },
+  {
+    key: "services_page_subtitle",
+    label: "Подзаголовок страницы каталога",
+    defaultValue:
+      "Аутсорсинг рабочего персонала для складских и производственных объектов любого масштаба.",
+  },
+];
+
 export default function PageTextsEditor({ initialTab }: { initialTab?: string }) {
   const [activeTab, setActiveTab] = useState<TabId>(
-    initialTab === "about" || initialTab === "contacts" ? (initialTab as TabId) : "home"
+    initialTab === "about" || initialTab === "contacts" || initialTab === "services"
+      ? (initialTab as TabId)
+      : "home"
   );
 
   const [homeBlocks, setHomeBlocks] = useState({
@@ -44,10 +60,50 @@ export default function PageTextsEditor({ initialTab }: { initialTab?: string })
   const [texts, setTexts] = useState<Record<string, string>>({
     ...Object.fromEntries(homeTextBlocks.map((b) => [b.key, b.defaultValue])),
     ...Object.fromEntries(aboutTextBlocks.map((b) => [b.key, b.defaultValue])),
+    ...Object.fromEntries(servicesTextBlocks.map((b) => [b.key, b.defaultValue])),
   });
 
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Загружаем сохраненные тексты из БД
+  useEffect(() => {
+    const loadTexts = async () => {
+      try {
+        const allBlocks = [...homeTextBlocks, ...aboutTextBlocks, ...servicesTextBlocks];
+        const loadedTexts: Record<string, string> = {};
+
+        for (const block of allBlocks) {
+          try {
+            const res = await fetch(`/api/admin/page-texts?key=${block.key}`, {
+              cache: "no-store",
+            });
+            if (res.ok) {
+              const data = await res.json();
+              if (data.text && data.text.trim()) {
+                loadedTexts[block.key] = data.text;
+              } else {
+                loadedTexts[block.key] = block.defaultValue;
+              }
+            } else {
+              loadedTexts[block.key] = block.defaultValue;
+            }
+          } catch {
+            loadedTexts[block.key] = block.defaultValue;
+          }
+        }
+
+        setTexts(loadedTexts);
+      } catch {
+        // ignore
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTexts();
+  }, []);
 
   const handleSaveText = async (key: string) => {
     setIsSaving(true);
@@ -89,15 +145,22 @@ export default function PageTextsEditor({ initialTab }: { initialTab?: string })
   };
 
   const currentBlocks =
-    activeTab === "home" ? homeTextBlocks : activeTab === "about" ? aboutTextBlocks : [];
+    activeTab === "home"
+      ? homeTextBlocks
+      : activeTab === "about"
+      ? aboutTextBlocks
+      : activeTab === "services"
+      ? servicesTextBlocks
+      : [];
 
   return (
     <div className="space-y-6">
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-zinc-800 mb-4">
+      <div className="flex gap-2 border-b border-border mb-4">
         {[
           { id: "home" as TabId, label: "Главная" },
           { id: "about" as TabId, label: "О компании" },
+          { id: "services" as TabId, label: "Каталог" },
           { id: "contacts" as TabId, label: "Контакты" },
         ].map((tab) => (
           <button
@@ -118,7 +181,7 @@ export default function PageTextsEditor({ initialTab }: { initialTab?: string })
       {/* Home tab: blocks + texts */}
       {activeTab === "home" && (
         <>
-          <Card className="border-zinc-800 bg-zinc-900/50">
+          <Card className="border-border bg-card">
             <CardHeader>
               <CardTitle className="font-[var(--font-oswald)] text-xl uppercase">
                 Блоки главной страницы
@@ -134,7 +197,7 @@ export default function PageTextsEditor({ initialTab }: { initialTab?: string })
               ].map((item) => (
                 <label
                   key={item.key}
-                  className="flex items-center justify-between gap-4 rounded-lg border border-zinc-800 px-3 py-2 text-sm"
+                  className="flex items-center justify-between gap-4 rounded-lg border border-border px-3 py-2 text-sm"
                 >
                   <span className="text-foreground">{item.label}</span>
                   <input
@@ -160,7 +223,7 @@ export default function PageTextsEditor({ initialTab }: { initialTab?: string })
           </Card>
 
           {currentBlocks.map((block) => (
-            <Card key={block.key} className="border-zinc-800 bg-zinc-900/50">
+            <Card key={block.key} className="border-border bg-card">
               <CardHeader>
                 <CardTitle className="font-[var(--font-oswald)] text-xl uppercase">
                   {block.label}
@@ -172,7 +235,7 @@ export default function PageTextsEditor({ initialTab }: { initialTab?: string })
                   onChange={(e) =>
                     setTexts({ ...texts, [block.key]: e.target.value })
                   }
-                  className="bg-zinc-950 border-zinc-800 min-h-[160px]"
+                  className="bg-background border-border min-h-[160px]"
                 />
                 <Button
                   type="button"
@@ -193,7 +256,7 @@ export default function PageTextsEditor({ initialTab }: { initialTab?: string })
       {activeTab === "about" && (
         <>
           {aboutTextBlocks.map((block) => (
-            <Card key={block.key} className="border-zinc-800 bg-zinc-900/50">
+            <Card key={block.key} className="border-border bg-card">
               <CardHeader>
                 <CardTitle className="font-[var(--font-oswald)] text-xl uppercase">
                   {block.label}
@@ -205,12 +268,46 @@ export default function PageTextsEditor({ initialTab }: { initialTab?: string })
                   onChange={(e) =>
                     setTexts({ ...texts, [block.key]: e.target.value })
                   }
-                  className="bg-zinc-950 border-zinc-800 min-h-[200px]"
+                  className="bg-background border-border min-h-[200px]"
                 />
                 <Button
                   type="button"
                   onClick={() => handleSaveText(block.key)}
                   disabled={isSaving}
+                  className="bg-[oklch(0.75_0.18_50)] hover:bg-[oklch(0.7_0.18_50)] text-black font-bold uppercase font-[var(--font-oswald)]"
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  Сохранить текст
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </>
+      )}
+
+      {/* Services tab */}
+      {activeTab === "services" && (
+        <>
+          {servicesTextBlocks.map((block) => (
+            <Card key={block.key} className="border-border bg-card">
+              <CardHeader>
+                <CardTitle className="font-[var(--font-oswald)] text-xl uppercase">
+                  {block.label}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Textarea
+                  value={texts[block.key] || ""}
+                  onChange={(e) =>
+                    setTexts({ ...texts, [block.key]: e.target.value })
+                  }
+                  className="bg-background border-border min-h-[120px]"
+                  disabled={isLoading}
+                />
+                <Button
+                  type="button"
+                  onClick={() => handleSaveText(block.key)}
+                  disabled={isSaving || isLoading}
                   className="bg-[oklch(0.75_0.18_50)] hover:bg-[oklch(0.7_0.18_50)] text-black font-bold uppercase font-[var(--font-oswald)]"
                 >
                   <Save className="w-4 h-4 mr-2" />

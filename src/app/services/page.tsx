@@ -14,6 +14,10 @@ type ServiceOverride = Partial<Service> & { id: string; deleted?: boolean };
 
 export default function ServicesPage() {
   const [overrides, setOverrides] = useState<Record<string, ServiceOverride>>({});
+  const [pageTitle, setPageTitle] = useState("Каталог услуг:");
+  const [pageSubtitle, setPageSubtitle] = useState(
+    "Аутсорсинг рабочего персонала для складских и производственных объектов любого масштаба."
+  );
 
   useEffect(() => {
     const load = async () => {
@@ -29,6 +33,35 @@ export default function ServicesPage() {
       }
     };
     load();
+  }, []);
+
+  useEffect(() => {
+    const loadPageTexts = async () => {
+      try {
+        const titleRes = await fetch("/api/admin/page-texts?key=services_page_title", {
+          cache: "no-store",
+        });
+        if (titleRes.ok) {
+          const titleData = await titleRes.json();
+          if (titleData.text && titleData.text.trim()) {
+            setPageTitle(titleData.text);
+          }
+        }
+
+        const subtitleRes = await fetch("/api/admin/page-texts?key=services_page_subtitle", {
+          cache: "no-store",
+        });
+        if (subtitleRes.ok) {
+          const subtitleData = await subtitleRes.json();
+          if (subtitleData.text && subtitleData.text.trim()) {
+            setPageSubtitle(subtitleData.text);
+          }
+        }
+      } catch {
+        // ignore
+      }
+    };
+    loadPageTexts();
   }, []);
 
   const getMergedServicesByCategory = (categoryId: string): Service[] => {
@@ -72,10 +105,10 @@ export default function ServicesPage() {
             className="max-w-3xl"
           >
             <h1 className="font-[var(--font-oswald)] text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-6">
-              Каталог <span className="gradient-text">услуг</span>
+              {pageTitle}
             </h1>
             <p className="text-lg text-muted-foreground">
-              Полный спектр услуг по подбору рабочего персонала для различных сфер деятельности
+              {pageSubtitle}
             </p>
           </motion.div>
         </div>
