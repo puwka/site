@@ -1,48 +1,75 @@
 import { cookies } from "next/headers";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 const ENV_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
+const ENV_USERNAME = process.env.ADMIN_USERNAME || "admin";
 
-async function readStoredPassword(): Promise<string | null> {
+interface AdminAuthData {
+  username: string;
+  password: string;
+}
+
+async function readStoredAuth(): Promise<AdminAuthData | null> {
   const { data, error } = await supabaseAdmin
     .from("admin_auth")
-    .select("password")
+    .select("username, password")
     .eq("id", 1)
     .maybeSingle();
 
   if (error) {
-    console.error("Supabase readStoredPassword error:", error.message);
+    console.error("Supabase readStoredAuth error:", error.message);
     return null;
   }
 
-  return data?.password ?? null;
+  if (!data) return null;
+
+  return {
+    username: data.username || ENV_USERNAME,
+    password: data.password || ENV_PASSWORD,
+  };
 }
 
-async function writeStoredPassword(password: string) {
+async function writeStoredAuth(authData: Partial<AdminAuthData>) {
+  const current = await readStoredAuth();
   const { error } = await supabaseAdmin.from("admin_auth").upsert(
     {
       id: 1,
-      password,
+      username: authData.username ?? current?.username ?? ENV_USERNAME,
+      password: authData.password ?? current?.password ?? ENV_PASSWORD,
     },
     { onConflict: "id" }
   );
 
   if (error) {
-    console.error("Supabase writeStoredPassword error:", error.message);
+    console.error("Supabase writeStoredAuth error:", error.message);
   }
 }
 
-async function getCurrentPassword(): Promise<string> {
-  const stored = await readStoredPassword();
-  return stored || ENV_PASSWORD;
+async function getCurrentAuth(): Promise<AdminAuthData> {
+  const stored = await readStoredAuth();
+  return stored || { username: ENV_USERNAME, password: ENV_PASSWORD };
+}
+
+export async function verifyCredentials(username: string, password: string): Promise<boolean> {
+  const current = await getCurrentAuth();
+  return username === current.username && password === current.password;
 }
 
 export async function verifyPassword(password: string): Promise<boolean> {
-  const current = await getCurrentPassword();
-  return password === current;
+  const current = await getCurrentAuth();
+  return password === current.password;
 }
 
 export async function updatePassword(newPassword: string) {
-  await writeStoredPassword(newPassword);
+  await writeStoredAuth({ password: newPassword });
+}
+
+export async function updateUsername(newUsername: string) {
+  await writeStoredAuth({ username: newUsername });
+}
+
+export async function getCurrentUsername(): Promise<string> {
+  const current = await getCurrentAuth();
+  return current.username;
 }
 
 export async function setAuthCookie() {

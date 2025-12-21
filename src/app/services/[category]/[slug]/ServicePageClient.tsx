@@ -87,6 +87,10 @@ export default function ServicePageClient({ service, category }: ServicePageClie
               seoText: override.seoText,
               pricingTable: override.pricingTable,
               images: override.images,
+              advantages: override.advantages,
+              cases: override.cases,
+              sectionTitles: override.sectionTitles,
+              showOrderForm: override.showOrderForm,
             });
           }
         }
@@ -199,7 +203,7 @@ export default function ServicePageClient({ service, category }: ServicePageClie
                 transition={{ duration: 0.6 }}
               >
                 <h2 className="font-[var(--font-oswald)] text-3xl md:text-4xl font-bold uppercase mb-6">
-                  Описание
+                  {localService.sectionTitles?.description || "Описание"}
                 </h2>
                 <div className="prose prose-invert max-w-none space-y-4">
                   {localService.fullDescription ? (
@@ -222,7 +226,7 @@ export default function ServicePageClient({ service, category }: ServicePageClie
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
                 <h2 className="font-[var(--font-oswald)] text-3xl md:text-4xl font-bold uppercase mb-6">
-                  Фотогалерея
+                  {localService.sectionTitles?.gallery || "Фотогалерея"}
                 </h2>
                 <ImageCarousel images={galleryImages} alt={localService.title} />
               </motion.div>
@@ -236,7 +240,7 @@ export default function ServicePageClient({ service, category }: ServicePageClie
                   transition={{ duration: 0.6, delay: 0.3 }}
                 >
                   <h2 className="font-[var(--font-oswald)] text-3xl md:text-4xl font-bold uppercase mb-6">
-                    Тарифы
+                    {localService.sectionTitles?.pricing || "Тарифы"}
                   </h2>
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse">
@@ -302,17 +306,20 @@ export default function ServicePageClient({ service, category }: ServicePageClie
                 transition={{ duration: 0.6, delay: 0.5 }}
               >
                 <h2 className="font-[var(--font-oswald)] text-3xl md:text-4xl font-bold uppercase mb-6">
-                  Преимущества
+                  {localService.sectionTitles?.advantages || "Преимущества"}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {[
-                    "Быстрое предоставление персонала",
-                    "Опытные и проверенные сотрудники",
-                    "Гибкий график работы",
-                    "Полная ответственность за результат",
-                    "Работа по договору",
-                    "Контроль качества выполнения работ",
-                  ].map((advantage, index) => (
+                  {(localService.advantages && localService.advantages.length > 0
+                    ? localService.advantages
+                    : [
+                        "Быстрое предоставление персонала",
+                        "Опытные и проверенные сотрудники",
+                        "Гибкий график работы",
+                        "Полная ответственность за результат",
+                        "Работа по договору",
+                        "Контроль качества выполнения работ",
+                      ]
+                  ).map((advantage, index) => (
                     <div
                       key={index}
                       className="flex items-start gap-3 p-4 rounded-xl bg-card border border-zinc-800"
@@ -332,31 +339,34 @@ export default function ServicePageClient({ service, category }: ServicePageClie
                 transition={{ duration: 0.6, delay: 0.6 }}
               >
                 <h2 className="font-[var(--font-oswald)] text-3xl md:text-4xl font-bold uppercase mb-6">
-                  Наши кейсы
+                  {localService.sectionTitles?.cases || "Наши кейсы"}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {[
-                    {
-                      title: "Крупный складской комплекс",
-                      description: "Обеспечили персоналом склад площадью 5000 м². Работали 15 грузчиков и 8 комплектовщиков ежедневно.",
-                      result: "Снижение простоев на 40%, повышение производительности",
-                    },
-                    {
-                      title: "Строительство жилого комплекса",
-                      description: "Предоставили 50 разнорабочих и 20 монтажников для строительства жилого комплекса.",
-                      result: "Соблюдение сроков, высокое качество работ",
-                    },
-                    {
-                      title: "Производственное предприятие",
-                      description: "Комплектование производственной линии персоналом: упаковщики, маркировщики, фасовщики.",
-                      result: "Увеличение выпуска продукции на 25%",
-                    },
-                    {
-                      title: "Уборка территории после стройки",
-                      description: "Выполнили полную уборку строительной площадки площадью 3000 м², включая вывоз мусора.",
-                      result: "Территория готова к сдаче в срок",
-                    },
-                  ].map((caseItem, index) => (
+                  {(localService.cases && localService.cases.length > 0
+                    ? localService.cases
+                    : [
+                        {
+                          title: "Крупный складской комплекс",
+                          description: "Обеспечили персоналом склад площадью 5000 м². Работали 15 грузчиков и 8 комплектовщиков ежедневно.",
+                          result: "Снижение простоев на 40%, повышение производительности",
+                        },
+                        {
+                          title: "Строительство жилого комплекса",
+                          description: "Предоставили 50 разнорабочих и 20 монтажников для строительства жилого комплекса.",
+                          result: "Соблюдение сроков, высокое качество работ",
+                        },
+                        {
+                          title: "Производственное предприятие",
+                          description: "Комплектование производственной линии персоналом: упаковщики, маркировщики, фасовщики.",
+                          result: "Увеличение выпуска продукции на 25%",
+                        },
+                        {
+                          title: "Уборка территории после стройки",
+                          description: "Выполнили полную уборку строительной площадки площадью 3000 м², включая вывоз мусора.",
+                          result: "Территория готова к сдаче в срок",
+                        },
+                      ]
+                  ).map((caseItem, index) => (
                     <Card key={index} className="h-full border-zinc-800 hover:border-[oklch(0.75_0.18_50)]/30 transition-all">
                       <CardContent className="p-6">
                         <h3 className="font-[var(--font-oswald)] text-xl font-bold uppercase mb-3 text-[oklch(0.75_0.18_50)]">
@@ -406,7 +416,7 @@ export default function ServicePageClient({ service, category }: ServicePageClie
               transition={{ duration: 0.6 }}
             >
               <h2 className="font-[var(--font-oswald)] text-3xl md:text-4xl font-bold uppercase mb-8">
-                Похожие услуги
+                {localService.sectionTitles?.related || "Похожие услуги"}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {relatedServices.slice(0, 3).map((relatedService) => (

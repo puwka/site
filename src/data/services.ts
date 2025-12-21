@@ -15,6 +15,24 @@ export interface Service {
     price: string;
     unit?: string;
   }>;
+  /** Преимущества услуги */
+  advantages?: string[];
+  /** Кейсы/портфолио */
+  cases?: Array<{
+    title: string;
+    description: string;
+    result: string;
+  }>;
+  /** Заголовки разделов на странице услуги */
+  sectionTitles?: {
+    description?: string;
+    gallery?: string;
+    pricing?: string;
+    seo?: string;
+    advantages?: string;
+    cases?: string;
+    related?: string;
+  };
 }
 
 export interface Category {

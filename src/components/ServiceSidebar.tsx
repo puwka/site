@@ -72,7 +72,7 @@ export default function ServiceSidebar() {
     <aside className="hidden lg:block fixed left-0 top-24 h-[calc(100vh-6rem)] w-[280px] overflow-y-auto z-30 custom-scrollbar dark:bg-zinc-950 dark:border-r dark:border-zinc-800 light:bg-white light:border-r light:border-zinc-200 shadow-sm">
       <div className="p-6">
         <h2 className="font-[var(--font-oswald)] text-lg font-bold uppercase dark:text-white light:text-zinc-900 mb-6">
-          Категории услуг
+          Категории
         </h2>
         <nav className="space-y-2">
           {categories.map((category) => {

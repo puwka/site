@@ -141,9 +141,6 @@ export default function Header() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="flex items-center gap-4 cursor-pointer bg-transparent border-none p-0"
-              onDoubleClick={() => {
-                window.location.href = "/admin/login";
-              }}
               onClick={() => {
                 router.push("/");
               }}

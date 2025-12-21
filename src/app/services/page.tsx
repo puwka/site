@@ -18,6 +18,12 @@ export default function ServicesPage() {
   const [pageSubtitle, setPageSubtitle] = useState(
     "Аутсорсинг рабочего персонала для складских и производственных объектов любого масштаба."
   );
+  const [categoriesData, setCategoriesData] = useState<Record<string, { name: string; description: string }>>({});
+  const [linkTexts, setLinkTexts] = useState({
+    allServices: "Все услуги",
+    showAllServices: "Показать все услуги",
+    details: "Подробнее",
+  });
 
   useEffect(() => {
     const load = async () => {
@@ -57,6 +63,42 @@ export default function ServicesPage() {
             setPageSubtitle(subtitleData.text);
           }
         }
+
+        // Загружаем данные категорий
+        const categoriesRes = await fetch("/api/admin/page-texts?key=services_categories", {
+          cache: "no-store",
+        });
+        if (categoriesRes.ok) {
+          const categoriesData = await categoriesRes.json();
+          if (categoriesData.text) {
+            try {
+              const parsed = JSON.parse(categoriesData.text);
+              const categoriesMap: Record<string, { name: string; description: string }> = {};
+              parsed.forEach((cat: { id: string; name: string; description: string }) => {
+                categoriesMap[cat.id] = { name: cat.name, description: cat.description };
+              });
+              setCategoriesData(categoriesMap);
+            } catch {
+              // Используем значения по умолчанию
+            }
+          }
+        }
+
+        // Загружаем тексты ссылок
+        const linkTextsRes = await fetch("/api/admin/page-texts?key=services_link_texts", {
+          cache: "no-store",
+        });
+        if (linkTextsRes.ok) {
+          const linkTextsData = await linkTextsRes.json();
+          if (linkTextsData.text) {
+            try {
+              const parsed = JSON.parse(linkTextsData.text);
+              setLinkTexts({ ...linkTexts, ...parsed });
+            } catch {
+              // Используем значения по умолчанию
+            }
+          }
+        }
       } catch {
         // ignore
       }
@@ -86,6 +128,10 @@ export default function ServicesPage() {
           seoText: override.seoText,
           pricingTable: override.pricingTable,
           images: override.images,
+          advantages: override.advantages,
+          cases: override.cases,
+          sectionTitles: override.sectionTitles,
+          showOrderForm: override.showOrderForm,
         });
       }
     });
@@ -104,7 +150,7 @@ export default function ServicesPage() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <h1 className="font-[var(--font-oswald)] text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-6">
+            <h1 className="font-[var(--font-oswald)] text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-6 text-[oklch(0.75_0.18_50)]">
               {pageTitle}
             </h1>
             <p className="text-lg text-muted-foreground">
@@ -131,17 +177,19 @@ export default function ServicesPage() {
                 >
                   <div className="mb-8 flex items-center justify-between">
                     <div>
-                      <h2 className="font-[var(--font-oswald)] text-3xl md:text-4xl font-bold uppercase mb-2">
-                        {category.name}
+                      <h2 className="font-[var(--font-oswald)] text-3xl md:text-4xl font-bold uppercase mb-2 text-[oklch(0.75_0.18_50)]">
+                        {categoriesData[category.id]?.name || category.name}
                       </h2>
-                      <p className="text-muted-foreground">{category.description}</p>
+                      <p className="text-muted-foreground">
+                        {categoriesData[category.id]?.description || category.description}
+                      </p>
                     </div>
                     <Link
                       href={`/services/${category.slug}`}
-                      className="hidden md:flex items-center gap-2 text-[oklch(0.75_0.18_50)] font-semibold hover:underline"
+                      className="hidden md:flex items-center gap-2 text-[oklch(0.75_0.18_50)] font-semibold hover:underline text-lg"
                     >
-                      Все услуги
-                      <ArrowRight className="w-4 h-4" />
+                      {linkTexts.allServices}
+                      <ArrowRight className="w-5 h-5" />
                     </Link>
                   </div>
 
@@ -169,7 +217,7 @@ export default function ServicesPage() {
                                 </p>
                               )}
                               <div className="flex items-center gap-2 text-[oklch(0.75_0.18_50)] font-semibold text-sm">
-                                Подробнее
+                                {linkTexts.details}
                                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                               </div>
                             </CardContent>
@@ -183,7 +231,7 @@ export default function ServicesPage() {
                     <div className="mt-6 text-center md:hidden">
                       <Link href={`/services/${category.slug}`}>
                         <span className="text-[oklch(0.75_0.18_50)] font-semibold hover:underline">
-                          Показать все услуги ({categoryServices.length})
+                          {linkTexts.showAllServices} ({categoryServices.length})
                         </span>
                       </Link>
                     </div>

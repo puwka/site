@@ -28,6 +28,21 @@ interface Service {
   pricingTable?: PricingRow[];
   images?: string[];
   showOrderForm?: boolean;
+  advantages?: string[];
+  cases?: Array<{
+    title: string;
+    description: string;
+    result: string;
+  }>;
+  sectionTitles?: {
+    description?: string;
+    gallery?: string;
+    pricing?: string;
+    seo?: string;
+    advantages?: string;
+    cases?: string;
+    related?: string;
+  };
 }
 
 type ServiceOverride = Partial<Service> & { deleted?: boolean };
@@ -610,6 +625,115 @@ export default function ServicesManager() {
                 </div>
               </div>
 
+              {/* Заголовки разделов */}
+              <div className="border border-border rounded-lg p-4 bg-background/50">
+                <label className="text-sm font-medium mb-3 block">Заголовки разделов</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Описание</label>
+                    <Input
+                      value={editedService.sectionTitles?.description || "Описание"}
+                      onChange={(e) =>
+                        setEditedService({
+                          ...editedService,
+                          sectionTitles: {
+                            ...editedService.sectionTitles,
+                            description: e.target.value,
+                          },
+                        })
+                      }
+                      className="bg-background border-border text-sm"
+                      placeholder="Описание"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Фотогалерея</label>
+                    <Input
+                      value={editedService.sectionTitles?.gallery || "Фотогалерея"}
+                      onChange={(e) =>
+                        setEditedService({
+                          ...editedService,
+                          sectionTitles: {
+                            ...editedService.sectionTitles,
+                            gallery: e.target.value,
+                          },
+                        })
+                      }
+                      className="bg-background border-border text-sm"
+                      placeholder="Фотогалерея"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Тарифы</label>
+                    <Input
+                      value={editedService.sectionTitles?.pricing || "Тарифы"}
+                      onChange={(e) =>
+                        setEditedService({
+                          ...editedService,
+                          sectionTitles: {
+                            ...editedService.sectionTitles,
+                            pricing: e.target.value,
+                          },
+                        })
+                      }
+                      className="bg-background border-border text-sm"
+                      placeholder="Тарифы"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Преимущества</label>
+                    <Input
+                      value={editedService.sectionTitles?.advantages || "Преимущества"}
+                      onChange={(e) =>
+                        setEditedService({
+                          ...editedService,
+                          sectionTitles: {
+                            ...editedService.sectionTitles,
+                            advantages: e.target.value,
+                          },
+                        })
+                      }
+                      className="bg-background border-border text-sm"
+                      placeholder="Преимущества"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Наши кейсы</label>
+                    <Input
+                      value={editedService.sectionTitles?.cases || "Наши кейсы"}
+                      onChange={(e) =>
+                        setEditedService({
+                          ...editedService,
+                          sectionTitles: {
+                            ...editedService.sectionTitles,
+                            cases: e.target.value,
+                          },
+                        })
+                      }
+                      className="bg-background border-border text-sm"
+                      placeholder="Наши кейсы"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Похожие услуги</label>
+                    <Input
+                      value={editedService.sectionTitles?.related || "Похожие услуги"}
+                      onChange={(e) =>
+                        setEditedService({
+                          ...editedService,
+                          sectionTitles: {
+                            ...editedService.sectionTitles,
+                            related: e.target.value,
+                          },
+                        })
+                      }
+                      className="bg-background border-border text-sm"
+                      placeholder="Похожие услуги"
+                    />
+                  </div>
+                </div>
+              </div>
+
               {/* Таблица тарифов */}
               <div>
                 <label className="text-sm font-medium mb-2 block">
@@ -701,6 +825,164 @@ export default function ServicesManager() {
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Добавить строку тарифа
+                  </Button>
+                </div>
+              </div>
+
+              {/* Преимущества */}
+              <div>
+                <label className="text-sm font-medium mb-2 block">
+                  Преимущества услуги
+                </label>
+                <p className="text-xs text-muted-foreground mb-2">
+                  Список преимуществ, которые отображаются на странице услуги
+                </p>
+                <div className="space-y-2">
+                  {(editedService.advantages || []).map((advantage, index) => (
+                    <div key={index} className="flex gap-2 items-center">
+                      <Input
+                        value={advantage}
+                        onChange={(e) => {
+                          const next = [...(editedService.advantages || [])];
+                          next[index] = e.target.value;
+                          setEditedService({
+                            ...editedService,
+                            advantages: next,
+                          });
+                        }}
+                        placeholder="Например: Быстрое предоставление персонала"
+                        className="bg-background border-border text-sm flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="text-red-400 hover:text-red-300"
+                        onClick={() => {
+                          const next = [...(editedService.advantages || [])];
+                          next.splice(index, 1);
+                          setEditedService({
+                            ...editedService,
+                            advantages: next,
+                          });
+                        }}
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const next = [...(editedService.advantages || []), ""];
+                      setEditedService({
+                        ...editedService,
+                        advantages: next,
+                      });
+                    }}
+                    className="w-full justify-center border-border text-xs"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Добавить преимущество
+                  </Button>
+                </div>
+              </div>
+
+              {/* Кейсы */}
+              <div>
+                <label className="text-sm font-medium mb-2 block">
+                  Кейсы / Портфолио
+                </label>
+                <p className="text-xs text-muted-foreground mb-2">
+                  Примеры выполненных работ для отображения на странице услуги
+                </p>
+                <div className="space-y-4">
+                  {(editedService.cases || []).map((caseItem, index) => (
+                    <div
+                      key={index}
+                      className="border border-border rounded-lg p-4 bg-background/50 space-y-3"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-medium text-foreground">Кейс {index + 1}</span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-400 hover:text-red-300"
+                          onClick={() => {
+                            const next = [...(editedService.cases || [])];
+                            next.splice(index, 1);
+                            setEditedService({
+                              ...editedService,
+                              cases: next,
+                            });
+                          }}
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <Input
+                        value={caseItem.title}
+                        onChange={(e) => {
+                          const next = [...(editedService.cases || [])];
+                          next[index] = { ...next[index], title: e.target.value };
+                          setEditedService({
+                            ...editedService,
+                            cases: next,
+                          });
+                        }}
+                        placeholder="Название кейса"
+                        className="bg-background border-border text-sm"
+                      />
+                      <Textarea
+                        value={caseItem.description}
+                        onChange={(e) => {
+                          const next = [...(editedService.cases || [])];
+                          next[index] = { ...next[index], description: e.target.value };
+                          setEditedService({
+                            ...editedService,
+                            cases: next,
+                          });
+                        }}
+                        placeholder="Описание кейса"
+                        className="bg-background border-border text-sm"
+                        rows={2}
+                      />
+                      <Input
+                        value={caseItem.result}
+                        onChange={(e) => {
+                          const next = [...(editedService.cases || [])];
+                          next[index] = { ...next[index], result: e.target.value };
+                          setEditedService({
+                            ...editedService,
+                            cases: next,
+                          });
+                        }}
+                        placeholder="Результат (например: Снижение простоев на 40%)"
+                        className="bg-background border-border text-sm"
+                      />
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const next = [
+                        ...(editedService.cases || []),
+                        { title: "", description: "", result: "" },
+                      ];
+                      setEditedService({
+                        ...editedService,
+                        cases: next,
+                      });
+                    }}
+                    className="w-full justify-center border-border text-xs"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Добавить кейс
                   </Button>
                 </div>
               </div>

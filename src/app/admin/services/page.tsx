@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { checkAuth } from "@/lib/auth";
 import ServicesManager from "@/components/ServicesManager";
+import ServicesPagesEditor from "@/components/ServicesPagesEditor";
+import ServicesAdminTabs from "@/components/ServicesAdminTabs";
 
 export default async function AdminServicesPage() {
   const isAuthenticated = await checkAuth();
@@ -15,7 +17,7 @@ export default async function AdminServicesPage() {
         <h1 className="font-[var(--font-oswald)] text-4xl font-bold uppercase mb-8">
           Каталог услуг
         </h1>
-        <ServicesManager />
+        <ServicesAdminTabs />
       </div>
     </div>
   );

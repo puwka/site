@@ -11,6 +11,7 @@ import { Lock, CheckCircle2, XCircle } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -21,7 +22,7 @@ export default function AdminLoginPage() {
     setStatus("idle");
 
     try {
-      const result = await loginAction(password);
+      const result = await loginAction(username, password);
       
       if (result.success) {
         setStatus("success");
@@ -59,11 +60,23 @@ export default function AdminLoginPage() {
                 Access Terminal
               </h1>
               <p className="text-muted-foreground text-sm">
-                Введите пароль для доступа к панели управления
+                Введите логин и пароль для доступа к панели управления
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Логин"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                  className="bg-background border-border h-12 text-foreground"
+                  disabled={isLoading || status === "success"}
+                  autoComplete="username"
+                />
+              </div>
               <div>
                 <Input
                   type="password"
@@ -73,6 +86,7 @@ export default function AdminLoginPage() {
                   required
                   className="bg-background border-border h-12 text-foreground"
                   disabled={isLoading || status === "success"}
+                  autoComplete="current-password"
                 />
               </div>
 
@@ -105,7 +119,7 @@ export default function AdminLoginPage() {
                 >
                   <XCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
                   <p className="text-red-400 text-sm">
-                    Неверный пароль. Попробуйте снова.
+                    Неверный логин или пароль. Попробуйте снова.
                   </p>
                 </motion.div>
               )}
@@ -116,4 +130,5 @@ export default function AdminLoginPage() {
     </div>
   );
 }
+
 

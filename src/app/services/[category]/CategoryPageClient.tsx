@@ -16,6 +16,11 @@ interface CategoryPageClientProps {
 
 export default function CategoryPageClient({ category, services }: CategoryPageClientProps) {
   const [overrides, setOverrides] = useState<Record<string, ServiceOverride>>({});
+  const [categoryData, setCategoryData] = useState<{ name: string; description: string } | null>(null);
+  const [linkTexts, setLinkTexts] = useState({
+    details: "Подробнее",
+    backToCatalog: "Вернуться к каталогу",
+  });
 
   useEffect(() => {
     const load = async () => {
@@ -26,12 +31,47 @@ export default function CategoryPageClient({ category, services }: CategoryPageC
         if (!res.ok) return;
         const data = (await res.json()) as Record<string, ServiceOverride>;
         setOverrides(data || {});
+
+        // Загружаем данные категорий
+        const categoriesRes = await fetch("/api/admin/page-texts?key=services_categories", {
+          cache: "no-store",
+        });
+        if (categoriesRes.ok) {
+          const categoriesData = await categoriesRes.json();
+          if (categoriesData.text) {
+            try {
+              const parsed = JSON.parse(categoriesData.text);
+              const catData = parsed.find((cat: { id: string }) => cat.id === category.id);
+              if (catData) {
+                setCategoryData({ name: catData.name, description: catData.description });
+              }
+            } catch {
+              // Используем значения по умолчанию
+            }
+          }
+        }
+
+        // Загружаем тексты ссылок
+        const linkTextsRes = await fetch("/api/admin/page-texts?key=services_link_texts", {
+          cache: "no-store",
+        });
+        if (linkTextsRes.ok) {
+          const linkTextsData = await linkTextsRes.json();
+          if (linkTextsData.text) {
+            try {
+              const parsed = JSON.parse(linkTextsData.text);
+              setLinkTexts({ ...linkTexts, ...parsed });
+            } catch {
+              // Используем значения по умолчанию
+            }
+          }
+        }
       } catch {
         // ignore
       }
     };
     load();
-  }, []);
+  }, [category.id]);
 
   const mergedServices: Service[] = services
     .map((service) => ({
@@ -55,6 +95,10 @@ export default function CategoryPageClient({ category, services }: CategoryPageC
         seoText: override.seoText,
         pricingTable: override.pricingTable,
         images: override.images,
+        advantages: override.advantages,
+        cases: override.cases,
+        sectionTitles: override.sectionTitles,
+        showOrderForm: override.showOrderForm,
       } as Service);
     }
   });
@@ -83,11 +127,11 @@ export default function CategoryPageClient({ category, services }: CategoryPageC
               <span className="text-foreground">{category.name}</span>
             </nav>
 
-            <h1 className="font-[var(--font-oswald)] text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-6">
-              {category.name}
+            <h1 className="font-[var(--font-oswald)] text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-6 text-[oklch(0.75_0.18_50)]">
+              {categoryData?.name || category.name}
             </h1>
             <p className="text-lg text-muted-foreground">
-              {category.description}
+              {categoryData?.description || category.description}
             </p>
           </motion.div>
         </div>
@@ -120,7 +164,7 @@ export default function CategoryPageClient({ category, services }: CategoryPageC
                         </p>
                       )}
                       <div className="flex items-center gap-2 text-[oklch(0.75_0.18_50)] font-semibold text-sm">
-                        Подробнее
+                        {linkTexts.details}
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </CardContent>
@@ -137,7 +181,7 @@ export default function CategoryPageClient({ category, services }: CategoryPageC
                 className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Вернуться к каталогу
+                {linkTexts.backToCatalog}
               </motion.div>
             </Link>
           </div>

@@ -20,6 +20,21 @@ type ServiceOverride = {
   }>;
   images?: string[];
   showOrderForm?: boolean;
+  advantages?: string[];
+  cases?: Array<{
+    title: string;
+    description: string;
+    result: string;
+  }>;
+  sectionTitles?: {
+    description?: string;
+    gallery?: string;
+    pricing?: string;
+    seo?: string;
+    advantages?: string;
+    cases?: string;
+    related?: string;
+  };
   deleted?: boolean;
 };
 
@@ -29,7 +44,7 @@ async function readOverrides(): Promise<OverridesMap> {
   const { data, error } = await supabaseAdmin
     .from("service_overrides")
     .select(
-      "id, slug, title, description, price, category_id, full_description, seo_text, pricing_table, images, show_order_form, deleted"
+      "id, slug, title, description, price, category_id, full_description, seo_text, pricing_table, images, show_order_form, advantages, cases, section_titles, deleted"
     );
 
   if (error) {
@@ -51,6 +66,9 @@ async function readOverrides(): Promise<OverridesMap> {
       pricingTable: (row.pricing_table as any) ?? undefined,
       images: (row.images as any) ?? undefined,
       showOrderForm: row.show_order_form ?? undefined,
+      advantages: (row.advantages as any) ?? undefined,
+      cases: (row.cases as any) ?? undefined,
+      sectionTitles: (row.section_titles as any) ?? undefined,
       deleted: row.deleted ?? undefined,
     };
   }
@@ -71,6 +89,9 @@ async function writeOverrides(data: OverridesMap) {
     pricing_table: item.pricingTable ?? null,
     images: item.images ?? null,
     show_order_form: item.showOrderForm ?? null,
+    advantages: item.advantages ?? null,
+    cases: item.cases ?? null,
+    section_titles: item.sectionTitles ?? null,
     deleted: item.deleted ?? null,
   }));
 
