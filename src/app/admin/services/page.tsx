@@ -15,7 +15,7 @@ export default async function AdminServicesPage() {
     <div className="p-8">
       <div className="max-w-6xl mx-auto">
         <h1 className="font-[var(--font-oswald)] text-4xl font-bold uppercase mb-8">
-          Каталог услуг
+          Каталог
         </h1>
         <ServicesAdminTabs />
       </div>
